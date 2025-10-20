@@ -18,12 +18,19 @@ namespace JourneyGame.Models
         public bool StartMenuLoop = true;
 
         // Character creation properties
+        public bool CharacterCreationMenuLoop = true;
         public Race playerRace = 0;
         public Job playerJob = 0;
         public string playerName = "";
-        public bool loop1 = true;
-        public bool loop2 = true;
-        public bool loop3 = true;
+        public bool CharacterLoop1 = true;
+        public bool CharacterLoop2 = true;
+        public bool CharacterLoop3 = true;
+
+        // House loops
+        public bool houseMenuLoop = true;
+        public bool HouseLoop1 = true;
+        public bool HouseLoop2 = true;
+        public bool HouseLoop3 = true;
 
         // Start MENUS
         public void StartMenu()
@@ -83,23 +90,149 @@ namespace JourneyGame.Models
 
         public void CharacterCreationMenu()
         {
-            Console.Clear();
-
-            int playerInput = 0;
-
-            // Character menu
-            while (loop1 == true)
+            while (CharacterCreationMenuLoop == true)
             {
-                Console.WriteLine("Character Creation Menu");
-                Console.WriteLine("Pick your race");
-                Console.WriteLine($"1.{Race.Human}");
-                Console.WriteLine($"2.{Race.Elf}");
-                Console.WriteLine($"3.{Race.Dwarf}");
-                Console.WriteLine($"4.{Race.Orc}");
-                Console.WriteLine($"5.{Race.Goblin}");
-                Console.WriteLine();
-                Console.Write("Write your input: ");
+                Console.Clear();
 
+                int playerInput = 0;
+
+                // Character menu
+                while (CharacterLoop1 == true)
+                {
+                    Console.WriteLine("Character Creation Menu");
+                    Console.WriteLine("Pick your race");
+                    Console.WriteLine($"1.{Race.Human}");
+                    Console.WriteLine($"2.{Race.Elf}");
+                    Console.WriteLine($"3.{Race.Dwarf}");
+                    Console.WriteLine($"4.{Race.Orc}");
+                    Console.WriteLine($"5.{Race.Goblin}");
+                    Console.WriteLine();
+                    Console.Write("Write your input: ");
+
+                    try
+                    {
+                        playerInput = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Error.BasicException();
+                    }
+
+                    if (playerInput >= 1 && playerInput <= 5)
+                    {
+                        CharacterLoop1 = false;
+                    }
+                    else
+                    {
+                        Error.BasicException();
+                    }
+                }
+
+                switch (playerInput)
+                {
+                    case 1:
+                        playerRace = Race.Human;
+                        break;
+                    case 2:
+                        playerRace = Race.Elf;
+                        break;
+                    case 3:
+                        playerRace = Race.Dwarf;
+                        break;
+                    case 4:
+                        playerRace = Race.Orc;
+                        break;
+                    case 5:
+                        playerRace = Race.Goblin;
+                        break;
+                }
+
+                Console.Clear();
+                playerInput = 0;
+
+                // Class selection for your character
+                while (CharacterLoop2 == true)
+                {
+                    Console.WriteLine("Pick your class");
+                    Console.WriteLine($"1.{Job.Warrior}");
+                    Console.WriteLine($"2.{Job.Mage}");
+                    Console.WriteLine($"3.{Job.Archer}");
+                    Console.WriteLine($"4.{Job.Thief}");
+                    Console.WriteLine($"5.{Job.Paladin}");
+                    Console.WriteLine();
+                    Console.Write("Write your input: ");
+
+                    try
+                    {
+                        playerInput = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Error.BasicException();
+                    }
+
+                    if (playerInput >= 1 && playerInput <= 5)
+                    {
+                        CharacterLoop2 = false;
+                    }
+                    else
+                    {
+                        Error.BasicException();
+                    }
+                }
+
+                switch (playerInput)
+                {
+                    case 1:
+                        playerJob = Job.Warrior;
+                        break;
+                    case 2:
+                        playerJob = Job.Mage;
+                        break;
+                    case 3:
+                        playerJob = Job.Archer;
+                        break;
+                    case 4:
+                        playerJob = Job.Thief;
+                        break;
+                    case 5:
+                        playerJob = Job.Paladin;
+                        break;
+                }
+
+                Console.Clear();
+
+                // Name your character
+                while (CharacterLoop3 == true)
+                {
+                    Console.WriteLine("Who are you?");
+                    Console.WriteLine();
+                    Console.Write("Write your name: ");
+                    playerName = Console.ReadLine();
+
+                    if (!string.IsNullOrWhiteSpace(playerName))
+                    {
+                        CharacterLoop3 = false;
+                    }
+                    else
+                    {
+                        Error.BasicException();
+                    }
+                }
+
+                Console.Clear();
+                var newPlayer = new Player(playerName, playerRace, playerJob);
+                Console.WriteLine($"Character Details: \n\n" +
+                    $"Name: {playerName} \n" +
+                    $"Race: {playerRace.ToString()} \n" +
+                    $"Class: {playerJob.ToString()}");
+
+                Console.WriteLine();
+                Console.WriteLine("Are you sure you want to contine?:");
+                Console.WriteLine("1. Yes");
+                Console.WriteLine("2. No");
+                Console.WriteLine();
+                Console.Write("Your answer: ");
                 try
                 {
                     playerInput = Convert.ToInt32(Console.ReadLine());
@@ -109,120 +242,23 @@ namespace JourneyGame.Models
                     Error.BasicException();
                 }
 
-                if (playerInput >= 1 && playerInput <= 5)
+                if (playerInput == 1)
                 {
-                    loop1 = false;
+                    Console.Clear();
+                    HouseMenu();
+                }
+                else if (playerInput == 2)
+                {
+                    CharacterLoop1 = true;
+                    CharacterLoop2 = true;
+                    CharacterLoop3 = true;
+                    continue;
                 }
                 else
                 {
                     Error.BasicException();
                 }
             }
-
-            switch (playerInput)
-            {
-                case 1:
-                    playerRace = Race.Human;
-                    break;
-                case 2:
-                    playerRace = Race.Elf;
-                    break;
-                case 3:
-                    playerRace = Race.Dwarf;
-                    break;
-                case 4:
-                    playerRace = Race.Orc;
-                    break;
-                case 5:
-                    playerRace = Race.Goblin;
-                    break;
-            }
-
-            Console.Clear();
-            playerInput = 0;
-
-            // Class selection for your character
-            while (loop2 == true)
-            {
-                Console.WriteLine("Pick your class");
-                Console.WriteLine($"1.{Job.Warrior}");
-                Console.WriteLine($"2.{Job.Mage}");
-                Console.WriteLine($"3.{Job.Archer}");
-                Console.WriteLine($"4.{Job.Thief}");
-                Console.WriteLine($"5.{Job.Paladin}");
-                Console.WriteLine();
-                Console.Write("Write your input: ");
-
-                try
-                {
-                    playerInput = Convert.ToInt32(Console.ReadLine());
-                }
-                catch
-                {
-                    Error.BasicException();
-                }
-
-                if (playerInput >= 1 && playerInput <= 5)
-                {
-                    loop2 = false;
-                }
-                else
-                {
-                    Error.BasicException();
-                }
-            }
-
-            switch (playerInput)
-            {
-                case 1:
-                    playerJob = Job.Warrior;
-                    break;
-                case 2:
-                    playerJob = Job.Mage;
-                    break;
-                case 3:
-                    playerJob = Job.Archer;
-                    break;
-                case 4:
-                    playerJob = Job.Thief;
-                    break;
-                case 5:
-                    playerJob = Job.Paladin;
-                    break;
-            }
-
-            Console.Clear();
-
-            // Name your character
-            while (loop3 == true)
-            {
-                Console.WriteLine("Who are you?");
-                Console.WriteLine();
-                Console.Write("Write your name: ");
-                playerName = Console.ReadLine();
-
-                if (!string.IsNullOrWhiteSpace(playerName))
-                {
-                    loop3 = false;
-                }
-                else
-                {
-                    Error.BasicException();
-                }
-            }
-
-            Console.Clear();
-            var newPlayer = new Player(playerName, playerRace, playerJob);
-            Console.WriteLine($"Character Details: \n\n" +
-                $"Name: {playerName} \n" +
-                $"Race: {playerRace.ToString()} \n" +
-                $"Class: {playerJob.ToString()}");
-
-            Console.WriteLine();
-            Console.Write("Press any key to continue: ");
-            Console.ReadLine();
-            Console.Clear();
-            HouseMenu();
         }
 
         // GAME MENUS
@@ -269,7 +305,16 @@ namespace JourneyGame.Models
                     "4. Go to your parents bedroom \n"
                 // add more options?
                 );
-                playerInput = Convert.ToInt32(Console.ReadLine());
+
+                try
+                {
+                    playerInput = Convert.ToInt32(Console.ReadLine());
+                }
+                catch
+                {
+                    Error.BasicException();
+                }
+
                 playerMoves--;
 
                 switch (playerInput)

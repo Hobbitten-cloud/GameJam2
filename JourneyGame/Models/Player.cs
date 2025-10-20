@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JourneyGame.Models
 {
-    internal class Player
+    public class Player
     {
         public string Name { get; set; }
         public int Health { get; set; }

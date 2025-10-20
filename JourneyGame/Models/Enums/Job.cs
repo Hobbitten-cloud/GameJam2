@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace JourneyGame.Models.Enums
 {
-    internal class Job
+    public enum Job
     {
-        public enum Jobs
-        {
-            Warrior,
-            Mage,
-            Archer,
-            Thief,
-            Paladin
-        }
+        Warrior,
+        Mage,
+        Archer,
+        Thief,
+        Paladin
     }
 }

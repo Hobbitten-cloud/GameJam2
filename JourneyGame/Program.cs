@@ -2,7 +2,7 @@
 
 namespace JourneyGame
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -10,10 +10,11 @@ namespace JourneyGame
             var gameMenus = new Menu();
             //var test = new Npc("Den store tester", Models.Enums.Race.Dwarf, "Du skal simpelthen opføre dig ordentligt!");
 
+            //Console.WriteLine($"{test.Name} \n{test.Dialogue}");
+
+
             // Game initialization and main loop would go here
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"{test.Name} \n{test.Dialogue}");
+            gameMenus.StartMenu();
         }
     }
 }

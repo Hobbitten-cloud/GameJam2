@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JourneyGame.Models
 {
-    internal class Menu
+    public class Menu
     {
         // Start MENUS
         public void StartMenu()

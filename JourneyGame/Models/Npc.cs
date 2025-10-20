@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JourneyGame.Models
 {
-    internal class Npc
+    public class Npc
     {
         public string Name { get; set; }
         public Race Race { get; set; }

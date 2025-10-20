@@ -11,8 +11,9 @@ namespace JourneyGame
             //var test = new Npc("Den store tester", Models.Enums.Race.Dwarf, "Du skal simpelthen opføre dig ordentligt!");
 
             // Game initialization and main loop would go here
-            gameMenus.StartMenu();
-            //Console.WriteLine($"{test.Name} \n{test.Dialogue}");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"{test.Name} \n{test.Dialogue}");
         }
     }
 }

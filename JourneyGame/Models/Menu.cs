@@ -11,6 +11,8 @@ namespace JourneyGame.Models
 {
     public class Menu
     {
+        // Menu properties
+        #region
         // Class objects
         public Error Error = new Error();
 
@@ -25,19 +27,28 @@ namespace JourneyGame.Models
         public bool CharacterLoop1 = true;
         public bool CharacterLoop2 = true;
         public bool CharacterLoop3 = true;
+        public bool CharacterLoop4 = true;
 
-        // House loops
-        public bool houseMenuLoop = true;
-        public bool HouseLoop1 = true;
-        public bool HouseLoop2 = true;
-        public bool HouseLoop3 = true;
+        // House rules properties
+        public bool HouseRules = true;
+
+        // House properties
+        public int playerMoves = 30;
+        public bool HouseMenuLoop = true;
+        public bool HouseLocationLoop1 = true;
+        public bool HouseLocationLoop2 = true;
+        public bool HouseLocationLoop3 = true;
+
+        #endregion
 
         // Start MENUS
         public void StartMenu()
         {
             while (StartMenuLoop == true)
             {
-                Console.WriteLine("Welcome to the [PLACEHOLDER]");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("   ___       _               ___                                   \r\n  |_  |     | |             |_  |                                  \r\n    | | ___ | |__  _ __       | | ___  _   _ _ __ _ __   ___ _   _ \r\n    | |/ _ \\| '_ \\| '_ \\      | |/ _ \\| | | | '__| '_ \\ / _ \\ | | |\r\n/\\__/ / (_) | | | | | | | /\\__/ / (_) | |_| | |  | | | |  __/ |_| |\r\n\\____/ \\___/|_| |_|_| |_| \\____/ \\___/ \\__,_|_|  |_| |_|\\___|\\__, |\r\n                                                              __/ |\r\n                                                             |___/ ");
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("1. Start New Game");
                 Console.WriteLine("2. Credits");
                 Console.WriteLine("3. Quit");
@@ -99,7 +110,7 @@ namespace JourneyGame.Models
                 // Character menu
                 while (CharacterLoop1 == true)
                 {
-                    Console.WriteLine("Character Creation Menu");
+                    Console.WriteLine(" _____ _                          _              _____                _   _             \r\n/  __ \\ |                        | |            /  __ \\              | | (_)            \r\n| /  \\/ |__   __ _ _ __ __ _  ___| |_ ___ _ __  | /  \\/_ __ ___  __ _| |_ _  ___  _ __  \r\n| |   | '_ \\ / _` | '__/ _` |/ __| __/ _ \\ '__| | |   | '__/ _ \\/ _` | __| |/ _ \\| '_ \\ \r\n| \\__/\\ | | | (_| | | | (_| | (__| ||  __/ |    | \\__/\\ | |  __/ (_| | |_| | (_) | | | |\r\n \\____/_| |_|\\__,_|_|  \\__,_|\\___|\\__\\___|_|     \\____/_|  \\___|\\__,_|\\__|_|\\___/|_| |_|\r\n                                                                                        \r\n                                                                                        ");
                     Console.WriteLine("Pick your race");
                     Console.WriteLine($"1.{Race.Human}");
                     Console.WriteLine($"2.{Race.Elf}");
@@ -219,20 +230,72 @@ namespace JourneyGame.Models
                         Error.BasicException();
                     }
                 }
-
                 Console.Clear();
+                playerInput = 0; // Reset player input for next menu
+
+                // Confirm character creation
                 var newPlayer = new Player(playerName, playerRace, playerJob);
-                Console.WriteLine($"Character Details: \n\n" +
-                    $"Name: {playerName} \n" +
-                    $"Race: {playerRace.ToString()} \n" +
-                    $"Class: {playerJob.ToString()}");
+                while (CharacterLoop4 == true)
+                {
+                    Console.WriteLine($"Character Details: \n\n" +
+                        $"Name: {playerName} \n" +
+                        $"Race: {playerRace.ToString()} \n" +
+                        $"Class: {playerJob.ToString()}");
+
+                    Console.WriteLine();
+                    Console.WriteLine("Are you sure you want to contine?:");
+                    Console.WriteLine("1. Yes");
+                    Console.WriteLine("2. No");
+                    Console.WriteLine();
+                    Console.Write("Your answer: ");
+                    try
+                    {
+                        playerInput = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Error.BasicException();
+                    }
+
+                    if (playerInput == 1)
+                    {
+                        Console.Clear();
+                        CharacterLoop4 = false;
+                        HouseRulesMenu();
+                    }
+                    else if (playerInput == 2)
+                    {
+                        CharacterLoop1 = true;
+                        CharacterLoop2 = true;
+                        CharacterLoop3 = true;
+                        continue;
+                    }
+                    else
+                    {
+                        Error.BasicException();
+                    }
+                }
+            }
+        }
+
+        // GAME MENUS
+        public void HouseRulesMenu()
+        {
+            int playerInput = 0;
+
+            // Intro to the house menu
+            while (HouseRules == true)
+            {
+                Console.WriteLine(
+                    " _   _ _____ _   _ _____ _____  ______ _   _ _      _____ _____ \r\n| | | |  _  | | | /  ___|  ___| | ___ \\ | | | |    |  ___/  ___|\r\n| |_| | | | | | | \\ `--.| |__   | |_/ / | | | |    | |__ \\ `--. \r\n|  _  | | | | | | |`--. \\  __|  |    /| | | | |    |  __| `--. \\\r\n| | | \\ \\_/ / |_| /\\__/ / |___  | |\\ \\| |_| | |____| |___/\\__/ /\r\n\\_| |_/\\___/ \\___/\\____/\\____/  \\_| \\_|\\___/\\_____/\\____/\\____/ \r\n                                                                \r\n                                                                \n" +
+                    "1. You have 30 moves to explore your house \n" +
+                    "2. Try to find as many items as you can before you leave \n" +
+                    "3. You can only move to one room at a time \n" +
+                    "4. Have fun!"
+                    );
 
                 Console.WriteLine();
-                Console.WriteLine("Are you sure you want to contine?:");
-                Console.WriteLine("1. Yes");
-                Console.WriteLine("2. No");
-                Console.WriteLine();
-                Console.Write("Your answer: ");
+                Console.Write("Type 1: to continue: ");
                 try
                 {
                     playerInput = Convert.ToInt32(Console.ReadLine());
@@ -245,14 +308,8 @@ namespace JourneyGame.Models
                 if (playerInput == 1)
                 {
                     Console.Clear();
+                    HouseRules = false;
                     HouseMenu();
-                }
-                else if (playerInput == 2)
-                {
-                    CharacterLoop1 = true;
-                    CharacterLoop2 = true;
-                    CharacterLoop3 = true;
-                    continue;
                 }
                 else
                 {
@@ -261,32 +318,13 @@ namespace JourneyGame.Models
             }
         }
 
-        // GAME MENUS
         public void HouseMenu()
         {
             Console.Clear();
-            bool houseMenuLoop = true;
-            int playerMoves = 30;
-
-            // Intro to the house menu
-            Console.WriteLine(
-                    "YOU ARE NOW READY \n" +
-                    "" +
-                    "You just created your character and are ready to start your adventure! \n" +
-                    "But first, you need to explore your house before you can leave. \n" +
-                    $"You have {playerMoves} moves to explore your house. \n" +
-                    $"Try to find as many items as you can before you leave. \n" +
-                    "Good luck! \n"
-                    );
-            Console.Write("Press anything to continue: ");
-            Console.ReadLine();
-
             string currentLocation = "";
             int playerInput = 0;
 
-            // House menu loop
-            Console.WriteLine();
-            while (houseMenuLoop == true)
+            while (HouseMenuLoop == true)
             {
                 // NOTES FOR TOMORROW
                 // MAKE A MAP SYSTEM THAT CAN TRACK WHERE THE PLAYER IS AND WHERE THEY CAN GO FROM THERE
@@ -298,7 +336,8 @@ namespace JourneyGame.Models
                 Console.WriteLine();
 
                 Console.WriteLine(
-                    "Navigation \n" +
+                    // ASCII Art Title
+                    " _   _             _             _   _             \r\n| \\ | |           (_)           | | (_)            \r\n|  \\| | __ ___   ___  __ _  __ _| |_ _  ___  _ __  \r\n| . ` |/ _` \\ \\ / / |/ _` |/ _` | __| |/ _ \\| '_ \\ \r\n| |\\  | (_| |\\ V /| | (_| | (_| | |_| | (_) | | | |\r\n\\_| \\_/\\__,_| \\_/ |_|\\__, |\\__,_|\\__|_|\\___/|_| |_|\r\n                      __/ |                        \r\n                     |___/                         \n" +
                     "1. Go to the Living Room \n" +
                     "2. Go to the Kitchen \n" +
                     "3. Go to the Bathroom \n" +
@@ -306,6 +345,7 @@ namespace JourneyGame.Models
                 // add more options?
                 );
 
+                Console.Write("Write your input: ");
                 try
                 {
                     playerInput = Convert.ToInt32(Console.ReadLine());
@@ -335,7 +375,7 @@ namespace JourneyGame.Models
 
                 if (playerMoves <= 0)
                 {
-                    houseMenuLoop = false;
+                    HouseMenuLoop = false;
                     Console.WriteLine("You have run out of moves! Time to leave the house.");
                     Console.Write("Press any key to continue: ");
                     Console.ReadLine();

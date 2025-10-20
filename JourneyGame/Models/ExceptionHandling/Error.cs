@@ -15,7 +15,6 @@ namespace JourneyGame.Models.ExceptionHandling
             Console.WriteLine("Error! Please try again!");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
-
         }
     }
 }

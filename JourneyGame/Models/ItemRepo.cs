@@ -7,31 +7,72 @@
             new Item
             {
                 Id = 1,
-                Name = "Bat",
-                Description = "An old Baseball bat",
+                Name = "Kaktus Shield",
+                Description = "It gives a Thorn in the side!",
             },
             new Item
             {
                 Id = 2,
-                Name = "Ring of Power",
-                Description = "Your mothers ring ",
+                Name = "Dice Set",
+                Description = "Ready to take a Cahnce?",
 
             },
             new Item
             {
                 Id = 3,
-                Name = "Toothbrush",
-                Description = "A used toothbrush",
+                Name = "Sok Sling",
+                Description = "Is this used?",
 
             },
             new Item
             {
                 Id = 4,
-                Name = "Chair",
-                Description = "An Worn out chair",
+                Name = "Mirror",
+                Description = "Mirror mirror on the wall why is i not this tall",
 
-            }
+            },
+            new Item
+            {
+                Id = 5,
+                Name = "Spoon",
+                Description = "SPOON KILLER!!!",
 
+            },
+            new Item
+            {
+                Id = 6,
+                Name = "Fotograf",
+                Description = "Look at this Fotograf.... it reminds me of somthing",
+
+            },
+            new Item
+            {
+                Id = 7,
+                Name = "Jacket",
+                Description = "+ 1 againts cold",
+
+            },
+            new Item
+            {
+                Id = 8,
+                Name = "Moms Toy",
+                Description = "i shold not have this",
+
+            },
+            new Item
+            {
+                Id = 9,
+                Name = "House keys",
+                Description = "Can åben all doors",
+
+            },
+            new Item
+            {
+                Id = 10,
+                Name = "Bird Book",
+                Description = "No Bird is save from my obsevations",
+
+            },
 
         };
 

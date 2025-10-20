@@ -13,8 +13,6 @@ namespace JourneyGame
             // Game initialization and main loop would go here
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
             Console.WriteLine($"{test.Name} \n{test.Dialogue}");
         }
     }

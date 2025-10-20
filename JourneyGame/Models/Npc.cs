@@ -18,5 +18,9 @@ namespace JourneyGame.Models
             Race = race;
             Dialogue = dialogue;
         }
+        public Npc(string dialogue)
+        {
+            Dialogue = dialogue;
+        }
     }
 }

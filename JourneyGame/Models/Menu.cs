@@ -1,4 +1,5 @@
 ﻿using JourneyGame.Models.Enums;
+using JourneyGame.Models.ExceptionHandling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,9 @@ namespace JourneyGame.Models
 {
     public class Menu
     {
+        // Class objects
+        public Error Error = new Error();
+
         // Start menu properties
         public bool StartMenuLoop = true;
 
@@ -41,11 +45,7 @@ namespace JourneyGame.Models
                 }
                 catch
                 {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Please try again!");
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Error.BasicException();
                 }
 
                 if (PlayerInput == 1)
@@ -106,11 +106,7 @@ namespace JourneyGame.Models
                 }
                 catch
                 {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Please try again!");
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Error.BasicException();
                 }
 
                 if (playerInput >= 1 && playerInput <= 5)
@@ -119,11 +115,7 @@ namespace JourneyGame.Models
                 }
                 else
                 {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Please try again!");
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Error.BasicException();
                 }
             }
 
@@ -167,11 +159,7 @@ namespace JourneyGame.Models
                 }
                 catch
                 {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Please try again!");
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Error.BasicException();
                 }
 
                 if (playerInput >= 1 && playerInput <= 5)
@@ -180,11 +168,7 @@ namespace JourneyGame.Models
                 }
                 else
                 {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Please try again!");
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Error.BasicException();
                 }
             }
 
@@ -223,11 +207,7 @@ namespace JourneyGame.Models
                 }
                 else
                 {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Error! Please try again!");
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Error.BasicException();
                 }
             }
 

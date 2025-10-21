@@ -18,7 +18,7 @@ namespace JourneyGame
 
 
             // Game initialization and main loop would go here
-            //gameMenus.StartMenu();
+            //gameMenus.CombatMenu();
             gameMenus.StartMenu();
         }
     }

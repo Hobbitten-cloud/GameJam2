@@ -23,6 +23,9 @@ namespace JourneyGame.Models
 
         new Player newPlayer;
 
+        // Random number generator for house key placement
+        private Random random = new Random();
+
         // ===========================================
         // MENU LOOP CONTROL VARIABLES
         // ===========================================
@@ -449,6 +452,9 @@ namespace JourneyGame.Models
             string currentLocation = "";
             int playerInput = 0;
 
+            // Randomly place house keys in one of the rooms (1-4: Living Room, Kitchen, Bathroom, Parents Bedroom)
+            int roomWithKeys = random.Next(1, 5);
+
             // Main house exploration loop - continues until player runs out of moves
             while (HouseMenuLoop == true)
             {
@@ -526,28 +532,28 @@ namespace JourneyGame.Models
                         // Living Room - Items: Dice Set (ID: 2), Mirror (ID: 4), Photograph (ID: 6)
                         Console.Clear();
                         currentLocation = livingRoom;
-                        int[] livingRoomItems = { 2, 4, 6 };
+                        int[] livingRoomItems = roomWithKeys == 1 ? new int[] { 2, 4, 6, 9 } : new int[] { 2, 4, 6 };
                         HandleRoomItems(livingRoom, livingRoomItems);
                         break;
                     case 2:
                         // Kitchen - Items: Spoon (ID: 5), Bird Book (ID: 10)
                         Console.Clear();
                         currentLocation = kitchen;
-                        int[] kitchenItems = { 5, 10 };
+                        int[] kitchenItems = roomWithKeys == 2 ? new int[] { 5, 10, 9 } : new int[] { 5, 10 };
                         HandleRoomItems(kitchen, kitchenItems);
                         break;
                     case 3:
                         // Bathroom - Items: Jacket (ID: 7)
                         Console.Clear();
                         currentLocation = bathroom;
-                        int[] bathroomItems = { 7 };
+                        int[] bathroomItems = roomWithKeys == 3 ? new int[] { 7, 9 } : new int[] { 7 };
                         HandleRoomItems(bathroom, bathroomItems);
                         break;
                     case 4:
                         // Parents Bedroom - Items: Mom's Toy (ID: 8), House keys (ID: 9)
                         Console.Clear();
                         currentLocation = parentsBedroom;
-                        int[] parentsBedroomItems = { 8, 9 };
+                        int[] parentsBedroomItems = roomWithKeys == 4 ? new int[] { 8, 9 } : new int[] { 8 };
                         HandleRoomItems(parentsBedroom, parentsBedroomItems);
                         break;
                     case 5:

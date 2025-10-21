@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JourneyGame.Models.Enums
+﻿namespace JourneyGame.Models.Enums
 {
     public enum Job
     {
@@ -12,6 +6,11 @@ namespace JourneyGame.Models.Enums
         Mage,
         Archer,
         Thief,
-        Paladin
+        Paladin,
+        Banker,
+        Butcher,
+        Bard,
+        Jester,
+        Chef
     }
 }

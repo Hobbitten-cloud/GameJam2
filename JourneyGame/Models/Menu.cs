@@ -971,7 +971,8 @@ namespace JourneyGame.Models
         // ===========================================
         // COMBAT MENU
         // ===========================================
-
+        public bool InCombat = true;
+        public bool PlayerChooseCombatAction = true;
         public void CombatMenu()
         {
             //Test player - fjern når fulde program køres
@@ -987,63 +988,86 @@ namespace JourneyGame.Models
             //need access to the player somehow
             while (newPlayer.Health > 0 && enemy.Health > 0)
             {
-                Console.WriteLine("What will you do?");
-                Console.WriteLine(
-                       "1. Attack \n" +
-                       "2. Cast spell \n" +
-                       "3. Use item \n" +
-                       "4. Run \n"
-                   // add more options?
-                   );
+                while (PlayerChooseCombatAction == true)
+                {
+                    Console.WriteLine("What will you do?");
+                    Console.WriteLine(
+                           "1. Attack \n" +
+                           "2. Cast spell \n" +
+                           "3. Use item \n" +
+                           "4. Run \n"
+                    // add more options?
+                    );
 
-                Console.Write("Write your input: ");
-                try
-                {
-                    playerInput = Convert.ToInt32(Console.ReadLine());
-                }
-                catch
-                {
-                    Error.BasicException();
-                }
-                Console.Clear();
-                switch (playerInput)
-                {
-                    case 1:
-                        Console.WriteLine($"{newPlayer.Name} is attacking {enemy.Name}\n");
-                        int tempdie = RollD20();
-                        Console.WriteLine($"Roll 10 or more to hit");
-                        Console.WriteLine($"You rolled {tempdie}");
-                        Thread.Sleep(1000);
+                    Console.Write("Write your input: ");
+                    try
+                    {
+                        playerInput = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Error.BasicException();
+                    }
 
-                        if (tempdie >= 10)
-                        {
-                            Console.WriteLine("You roll a d10 to determine your damage");
-                            int d10 = RollD10();
-                            Thread.Sleep(500);
-                            Console.WriteLine($"You rolled {d10}");
-                            Thread.Sleep(500);
-                            enemy.TakeDamage(d10);
-                            Console.WriteLine($"{enemy.Name} takes {d10} damage");
-                        }
-                        else
-                        {
-                            Thread.Sleep(500);
-                            Console.WriteLine($"your roll is to low - miss");
-                        }
-                        Console.WriteLine("Press anything to continue");
-                        Console.ReadLine();
-                        Console.Clear();
-                        break;
-                    case 2:
-                        CastSpell();
-                        break;
-                    case 3:
-                        UseItem();
-                        break;
-                    case 4:
-                        Run();
-                        break;
+                    if (playerInput < 1 || playerInput > 4)
+                    {
+                        Error.BasicException();
+                    }
+
+                    switch (playerInput)
+                    {
+                        case 1:
+                            PlayerChooseCombatAction = false;
+                            Console.WriteLine($"{newPlayer.Name} is attacking {enemy.Name}\n");
+                            int tempdie = RollD20();
+                            Console.WriteLine($"Roll 10 or more to hit");
+                            Console.WriteLine($"You rolled {tempdie}");
+                            Thread.Sleep(1000);
+
+                            if (tempdie >= 10)
+                            {
+                                Console.WriteLine("You roll a d10 to determine your damage");
+                                int d10 = RollD10();
+                                Thread.Sleep(500);
+                                Console.WriteLine($"You rolled {d10}");
+                                Thread.Sleep(500);
+                                enemy.TakeDamage(d10);
+                                Console.WriteLine($"{enemy.Name} takes {d10} damage");
+                            }
+                            else
+                            {
+                                Thread.Sleep(500);
+                                Console.WriteLine($"your roll is to low - miss");
+                            }
+                            Console.WriteLine("Press anything to continue");
+                            Console.ReadLine();
+                            Console.Clear();
+                            break;
+                        case 2:
+                            CastSpell();
+                            break;
+                        case 3:
+                            Console.Clear();
+                            UseItem();
+                            Console.Write("Press anything to contine: ");
+                            Console.ReadLine();
+                            break;
+                        case 4:
+                            Console.Clear();
+                            InCombat = false;
+                            PlayerChooseCombatAction = false;
+                            Console.WriteLine("You ran away!");
+                            Thread.Sleep(1000);
+                            break;
+                    }
                 }
+
+                // Breaks the loop incase the player choose to end the fight
+                if (InCombat == false)
+                {
+                    break;
+                }
+
                 Console.Clear();
                 if (enemy.Health <= 0)
                 {
@@ -1051,6 +1075,7 @@ namespace JourneyGame.Models
                     Thread.Sleep(5000);
                     break;
                 }
+
                 //Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
                 //Console.WriteLine("Press anything to continue");
                 //if(newPlayer.Health <= 0 || enemy.Health <= 0)
@@ -1058,8 +1083,8 @@ namespace JourneyGame.Models
                 //	Console.WriteLine(
                 //}
                 //Console.ReadLine();
-                Console.Clear();
 
+                Console.Clear();
                 Console.WriteLine($"{enemy.Name} is attacking you\n");
                 int temp = RollD20();
                 Console.WriteLine($"{enemy.Name} has to roll 10 or more to hit");
@@ -1081,11 +1106,20 @@ namespace JourneyGame.Models
                     Console.WriteLine($"{enemy.Name} roll is to low - miss");
                 }
                 Console.WriteLine("Press anything to continue");
+
+                // Reset for next turn
+                PlayerChooseCombatAction = true;
+
                 Console.ReadLine();
                 Console.Clear();
                 if (newPlayer.Health <= 0)
                 {
                     Console.WriteLine($"{newPlayer.Name} is dead - GAME OVER");
+
+                    //---------------------------------
+                    // Call the gameover method here?
+                    //---------------------------------
+
                     Thread.Sleep(10000);
                     break;
                 }
@@ -1094,30 +1128,28 @@ namespace JourneyGame.Models
             }
             Console.Clear();
         }
+
         public void CastSpell()
         {
             //If we make spells 
         }
+
         public void UseItem()
         {
-            //if items do anything
+            Inventory.ShowInventory();
         }
-        //Straight up doesn't work ¯\_(ツ)_/¯
-        public void Run()
-        {
-            //You haul ass - maybe some enemies can trip you 
-            //how to break twice?
-            Console.WriteLine("RUNAWAY!");
-            Thread.Sleep(1000);
-        }
+
         public int RollD20()
         {
+            // 1 gets picked and not 20 - read the docs
             Random r = new Random();
             int rInt = r.Next(1, 20);
             return rInt;
         }
+
         public int RollD10()
         {
+            // 1 gets picked and not 10 - read the docs
             Random r = new Random();
             int rInt = r.Next(1, 10);
             return rInt;

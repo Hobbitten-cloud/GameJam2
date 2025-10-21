@@ -232,6 +232,7 @@ namespace JourneyGame.Models
                 }
                 Console.Clear();
                 playerInput = 0; // Reset player input for next menu
+                CharacterLoop4 = true; // reset loop for confirmation
 
                 // Confirm character creation
                 var newPlayer = new Player(playerName, playerRace, playerJob);
@@ -265,6 +266,7 @@ namespace JourneyGame.Models
                     }
                     else if (playerInput == 2)
                     {
+                        CharacterLoop4 = false;
                         CharacterLoop1 = true;
                         CharacterLoop2 = true;
                         CharacterLoop3 = true;

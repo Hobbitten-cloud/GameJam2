@@ -8,6 +8,7 @@ namespace JourneyGame.Models
     {
         public string Name { get; set; }
         public int Health { get; set; }
+        public int MaxHealth { get; set; }
         public Race Race { get; set; }
         public Job Job { get; set; }
         public double PublicRelations { get; set; }
@@ -29,7 +30,7 @@ namespace JourneyGame.Models
         public void Heal(int amount)
         {
             Health += amount;
-            if (Health > 100) Health = 100;
+            if (Health > MaxHealth) Health = MaxHealth;
         }
 
         public void InitializeValues()
@@ -107,6 +108,7 @@ namespace JourneyGame.Models
             if (stats.TryGetValue(Race, out var jobStats) && jobStats.TryGetValue(Job, out var values))
             {
                 Health = values.Health;
+                MaxHealth = Health;
                 PublicRelations = values.PR;
             }
             else

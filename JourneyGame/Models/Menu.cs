@@ -406,7 +406,7 @@ namespace JourneyGame.Models
 			newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
 
 			//Test enemy
-			Enemy enemy = new Enemy("JohnSouls", 10, 1, Race.Orc);
+			Enemy enemy = new Enemy("JohnSouls", 10, 5, Race.Orc);
 
 			Console.Clear();
 			int playerInput = 0;
@@ -438,11 +438,11 @@ namespace JourneyGame.Models
 				{
 					case 1:
 						int tempdie = RollD20();
-						Console.WriteLine($"Hit 15 or more to hit");
+						Console.WriteLine($"Hit 12 or more to hit");
 						Console.WriteLine($"You rolled {tempdie}");
 						Thread.Sleep(2000);
 
-						if (tempdie >= 15)
+						if (tempdie >= 12)
 						{
 							Console.WriteLine("You roll a d10 to determine your damage");
 							int d10 = RollD10();
@@ -451,7 +451,6 @@ namespace JourneyGame.Models
 							Thread.Sleep(1000);
 							enemy.TakeDamage(d10);
                             Console.WriteLine($"{enemy.Name} takes {d10} damage");
-							
 						}
 						else
 						{
@@ -473,6 +472,12 @@ namespace JourneyGame.Models
 						break;
 				}
 				Console.Clear();
+				if (enemy.Health <= 0)
+				{
+					Console.WriteLine($"{enemy.Name} is dead - VICTORY");
+					Thread.Sleep(5000);
+					break;
+				}
 				//Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
 				//Console.WriteLine("Press anything to continue");
 				//if(newPlayer.Health <= 0 || enemy.Health <= 0)
@@ -484,18 +489,18 @@ namespace JourneyGame.Models
 
 				Console.WriteLine($"{enemy.Name} is attacking you");
 				int temp = RollD20();
-				Console.WriteLine($"{enemy.Name} has to roll 15 or more to hit");
+				Console.WriteLine($"{enemy.Name} has to roll 12 or more to hit");
 				Console.WriteLine($"{enemy.Name} rolled {temp}");
 				Thread.Sleep(2000);
-				if (temp >= 15)
+				if (temp >= 12)
 				{
 					Console.WriteLine($"{enemy.Name} roll a d10 to determine their damage");
 					int d10 = RollD10();
 					Thread.Sleep(1000);
-					Console.WriteLine($"{enemy.Name} rolled {d10}");
+					Console.WriteLine($"{enemy.Name} rolled {d10 + enemy.Damage}");
 					Thread.Sleep(1000);
-					newPlayer.TakeDamage(d10);
-					Console.WriteLine($"{newPlayer.Name} takes {d10} damage");
+					newPlayer.TakeDamage(d10+enemy.Damage);
+					Console.WriteLine($"{newPlayer.Name} takes {d10+enemy.Damage} damage");
 				}
 				else
 				{
@@ -505,6 +510,13 @@ namespace JourneyGame.Models
 				Console.WriteLine("Press anything to continue");
 				Console.ReadLine();
 				Console.Clear();
+				if(newPlayer.Health <= 0)
+				{
+					Console.WriteLine($"{newPlayer.Name} is dead - GAME OVER");
+					Thread.Sleep(10000);
+					break;
+				}
+				
 				Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
 			}
 			Console.Clear();

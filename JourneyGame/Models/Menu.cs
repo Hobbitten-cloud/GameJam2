@@ -292,7 +292,7 @@ namespace JourneyGame.Models
                     "2. Try to find as many items as you can before you leave \n" +
                     "3. You can only move to one room at a time \n" +
                     "4. Have fun!"
-                    );
+                );
 
                 Console.WriteLine();
                 Console.Write("Type 1: to continue: ");

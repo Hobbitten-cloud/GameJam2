@@ -84,7 +84,7 @@ namespace JourneyGame.Models
                 else if (PlayerInput == 2)
                 {
                     Console.Clear();
-                    Console.WriteLine("Game developed by: \nBirk\nAlbert\nDennis\nNicklas\nPatrick");
+                    Console.WriteLine("Game developed by: \nBirk\nAlbert\nDennis\nNicklas\nPatrick\nArchie\nAsk");
                     Console.WriteLine();
                     Console.Write("Press any key to return: ");
                     Console.ReadLine();

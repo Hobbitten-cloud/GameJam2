@@ -451,12 +451,16 @@ namespace JourneyGame.Models
 							Thread.Sleep(1000);
 							enemy.TakeDamage(d10);
                             Console.WriteLine($"{enemy.Name} takes {d10} damage");
+							
 						}
 						else
 						{
 							Thread.Sleep(1000);
 							Console.WriteLine($"your roll is to low - miss");
 						}
+						Console.WriteLine("Press anything to continue");
+						Console.ReadLine();
+						Console.Clear();
 						break;
 					case 2:
 						CastSpell();
@@ -468,16 +472,17 @@ namespace JourneyGame.Models
 						Run();
 						break;
 				}
-				Thread.Sleep(2000);
 				Console.Clear();
-				Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
-				Console.WriteLine("Press anything to continue");
-				Console.ReadLine();
+				//Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
+				//Console.WriteLine("Press anything to continue");
+				//if(newPlayer.Health <= 0 || enemy.Health <= 0)
+				//{
+				//	Console.WriteLine(
+				//}
+				//Console.ReadLine();
 				Console.Clear();
 
-				//newPlayer.TakeDamage(enemy.Damage);
-				//Console.WriteLine($" {newPlayer.Health}");
-
+				Console.WriteLine($"{enemy.Name} is attacking you");
 				int temp = RollD20();
 				Console.WriteLine($"{enemy.Name} has to roll 15 or more to hit");
 				Console.WriteLine($"{enemy.Name} rolled {temp}");
@@ -497,6 +502,8 @@ namespace JourneyGame.Models
 					Thread.Sleep(1000);
 					Console.WriteLine($"{enemy.Name} roll is to low - miss");
 				}
+				Console.WriteLine("Press anything to continue");
+				Console.ReadLine();
 				Console.Clear();
 				Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
 			}

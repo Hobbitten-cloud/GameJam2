@@ -1,5 +1,6 @@
 ﻿using JourneyGame.Models.Enums;
 using JourneyGame.Models.ExceptionHandling;
+using JourneyGame.Repo;
 
 namespace JourneyGame.Models
 {

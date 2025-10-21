@@ -9,6 +9,7 @@ namespace JourneyGame.Models
         public string Name { get; set; }
         public int Health { get; set; }
         public int MaxHealth { get; set; }
+        public string Title {  get; set; }
         public Race Race { get; set; }
         public Job Job { get; set; }
         public double PublicRelations { get; set; }

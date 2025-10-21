@@ -437,24 +437,25 @@ namespace JourneyGame.Models
 				switch (playerInput)
 				{
 					case 1:
+						Console.WriteLine($"{newPlayer.Name} is attacking {enemy.Name}\n");
 						int tempdie = RollD20();
-						Console.WriteLine($"Hit 12 or more to hit");
+						Console.WriteLine($"Roll 10 or more to hit");
 						Console.WriteLine($"You rolled {tempdie}");
-						Thread.Sleep(2000);
+						Thread.Sleep(1000);
 
-						if (tempdie >= 12)
+						if (tempdie >= 10)
 						{
 							Console.WriteLine("You roll a d10 to determine your damage");
 							int d10 = RollD10();
-							Thread.Sleep(1000);
+							Thread.Sleep(500);
                             Console.WriteLine($"You rolled {d10}");
-							Thread.Sleep(1000);
+							Thread.Sleep(500);
 							enemy.TakeDamage(d10);
                             Console.WriteLine($"{enemy.Name} takes {d10} damage");
 						}
 						else
 						{
-							Thread.Sleep(1000);
+							Thread.Sleep(500);
 							Console.WriteLine($"your roll is to low - miss");
 						}
 						Console.WriteLine("Press anything to continue");
@@ -487,24 +488,24 @@ namespace JourneyGame.Models
 				//Console.ReadLine();
 				Console.Clear();
 
-				Console.WriteLine($"{enemy.Name} is attacking you");
+				Console.WriteLine($"{enemy.Name} is attacking you\n");
 				int temp = RollD20();
-				Console.WriteLine($"{enemy.Name} has to roll 12 or more to hit");
+				Console.WriteLine($"{enemy.Name} has to roll 10 or more to hit");
 				Console.WriteLine($"{enemy.Name} rolled {temp}");
-				Thread.Sleep(2000);
-				if (temp >= 12)
+				Thread.Sleep(1000);
+				if (temp >= 10)
 				{
 					Console.WriteLine($"{enemy.Name} roll a d10 to determine their damage");
 					int d10 = RollD10();
-					Thread.Sleep(1000);
+					Thread.Sleep(500);
 					Console.WriteLine($"{enemy.Name} rolled {d10 + enemy.Damage}");
-					Thread.Sleep(1000);
+					Thread.Sleep(500);
 					newPlayer.TakeDamage(d10+enemy.Damage);
 					Console.WriteLine($"{newPlayer.Name} takes {d10+enemy.Damage} damage");
 				}
 				else
 				{
-					Thread.Sleep(1000);
+					Thread.Sleep(500);
 					Console.WriteLine($"{enemy.Name} roll is to low - miss");
 				}
 				Console.WriteLine("Press anything to continue");

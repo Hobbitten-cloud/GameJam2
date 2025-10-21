@@ -411,7 +411,7 @@ namespace JourneyGame.Models
 			Console.Clear();
 			int playerInput = 0;
 
-			Console.WriteLine($"You are fighting {enemy.Name}");
+			Console.WriteLine($"You are fighting {enemy.Name}\n");
 			//need access to the player somehow
 			while (newPlayer.Health > 0 && enemy.Health > 0)
 			{
@@ -511,15 +511,15 @@ namespace JourneyGame.Models
 		}
 		public void CastSpell()
 		{
-
+			//If we make spells 
 		}
 		public void UseItem()
 		{
-
+			//if items do anything
 		}
 		public void Run()
 		{
-
+			//You haul ass - maybe some enemies can trip you 
 		}
 		public int RollD20()
 		{

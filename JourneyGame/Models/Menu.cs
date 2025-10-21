@@ -519,24 +519,28 @@ namespace JourneyGame.Models
                 {
                     case 1:
                         // Living Room - Items: Dice Set (ID: 2), Mirror (ID: 4), Photograph (ID: 6)
+                        Console.Clear();
                         currentLocation = livingRoom;
                         int[] livingRoomItems = { 2, 4, 6 };
                         HandleRoomItems(livingRoom, livingRoomItems);
                         break;
                     case 2:
                         // Kitchen - Items: Spoon (ID: 5), Bird Book (ID: 10)
+                        Console.Clear();
                         currentLocation = kitchen;
                         int[] kitchenItems = { 5, 10 };
                         HandleRoomItems(kitchen, kitchenItems);
                         break;
                     case 3:
                         // Bathroom - Items: Jacket (ID: 7)
+                        Console.Clear();
                         currentLocation = bathroom;
                         int[] bathroomItems = { 7 };
                         HandleRoomItems(bathroom, bathroomItems);
                         break;
                     case 4:
                         // Parents Bedroom - Items: Mom's Toy (ID: 8), House keys (ID: 9)
+                        Console.Clear();
                         currentLocation = parentsBedroom;
                         int[] parentsBedroomItems = { 8, 9 };
                         HandleRoomItems(parentsBedroom, parentsBedroomItems);

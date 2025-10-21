@@ -7,25 +7,20 @@ using System.Threading.Tasks;
 
 namespace JourneyGame.Models
 {
-    public class Enemy
+    public class Npc
     {
         public string Name { get; set; }
-        public int Health { get; set; }
-        public int Damage { get; set; }
         public Race Race { get; set; }
-
-        public Enemy(string name, int health, int damage, Race race)
+        public string Dialogue { get; set; }
+        public Npc(string name, Race race, string dialogue)
         {
             Name = name;
-            Health = health;
-            Damage = damage;
             Race = race;
+            Dialogue = dialogue;
         }
-
-        public void TakeDamage(int damage)
+        public Npc(string dialogue)
         {
-            Health -= damage;
-            if (Health < 0) Health = 0;
+            Dialogue = dialogue;
         }
     }
 }

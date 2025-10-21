@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JourneyGame.Models
 {
-    internal class Event
+    public class Event
     {
         public string Description { get; set; }
         public Action<Player> Effect { get; set; }

@@ -15,9 +15,13 @@
         public static void RemoveItem(Item item)
         {
             if (_items.Remove(item))
+            {
                 Console.WriteLine($"You removed: {item.Name}");
+            }
             else
+            {
                 Console.WriteLine($"Item not found in your inventory.");
+            }
         }
 
         public static void ShowInventory()

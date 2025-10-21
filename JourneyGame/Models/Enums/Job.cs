@@ -12,6 +12,7 @@ namespace JourneyGame.Models.Enums
         Mage,
         Archer,
         Thief,
-        Paladin
+        Paladin,
+        Banker
     }
 }

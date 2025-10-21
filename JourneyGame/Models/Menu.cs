@@ -745,14 +745,10 @@ namespace JourneyGame.Models
 
                             if (playerInput == 1)
                             {
-                                // Exit room and show inventory
+                                // Exit room
                                 Console.Clear();
                                 Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("You leave the room");
-                                Inventory.ShowInventory();
-                                Console.Write("Press anything to continue: ");
-                                Console.ReadLine();
-                                Console.Clear();
+                                Console.WriteLine("You left the room");
                                 RoomItemLoop = false;
                                 return;
                             }
@@ -790,15 +786,12 @@ namespace JourneyGame.Models
                                 Error.BasicException();
                             }
 
-                            if (playerInput == optionNumber) // Exit room selected
+                            if (playerInput == optionNumber)
                             {
+                                // Exit room
                                 Console.Clear();
                                 Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("You leave the room");
-                                Inventory.ShowInventory();
-                                Console.Write("Press anything to continue: ");
-                                Console.ReadLine();
-                                Console.Clear();
+                                Console.WriteLine("You left the room");
                                 RoomItemLoop = false;
                                 return;
                             }

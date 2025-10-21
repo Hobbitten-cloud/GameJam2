@@ -971,7 +971,7 @@ namespace JourneyGame.Models
         // ===========================================
         // COMBAT MENU
         // ===========================================
-
+        public bool InCombat = true; 
         public void CombatMenu()
         {
             //Test player - fjern når fulde program køres
@@ -994,7 +994,7 @@ namespace JourneyGame.Models
                        "3. Use item \n" +
                        "4. Run \n"
                    // add more options?
-                   );
+                );
 
                 Console.Write("Write your input: ");
                 try
@@ -1041,9 +1041,18 @@ namespace JourneyGame.Models
                         UseItem();
                         break;
                     case 4:
-                        Run();
+                        InCombat = false;
+                        Console.WriteLine("You ran away!");
+                        Thread.Sleep(1000);
                         break;
                 }
+
+                // Breaks the loop incase the player choose to end the fight
+                if (InCombat == false)
+                {
+                    break;
+                }
+
                 Console.Clear();
                 if (enemy.Health <= 0)
                 {
@@ -1094,30 +1103,28 @@ namespace JourneyGame.Models
             }
             Console.Clear();
         }
+
         public void CastSpell()
         {
             //If we make spells 
         }
+
         public void UseItem()
         {
             //if items do anything
         }
-        //Straight up doesn't work ¯\_(ツ)_/¯
-        public void Run()
-        {
-            //You haul ass - maybe some enemies can trip you 
-            //how to break twice?
-            Console.WriteLine("RUNAWAY!");
-            Thread.Sleep(1000);
-        }
+
         public int RollD20()
         {
+            // 1 gets picked and not 20 - read the docs
             Random r = new Random();
             int rInt = r.Next(1, 20);
             return rInt;
         }
+
         public int RollD10()
         {
+            // 1 gets picked and not 10 - read the docs
             Random r = new Random();
             int rInt = r.Next(1, 10);
             return rInt;

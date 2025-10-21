@@ -29,7 +29,10 @@ namespace JourneyGame
             var ElfMage = new Npc("Ash", Models.Enums.Race.Elf, "This is my BOOM stick");
             var ElfThief = new Npc("Fleet-Footed Fenty", Models.Enums.Race.Elf, "Wanna see me run to that mountain and back? Wanna see me do it again?");
             var GoblinMage = new Npc("Etienne", Models.Enums.Race.Goblin, "bogos binted 0.0");
-            var DwarfWarrior = new Npc("Gimli", Models.Enums.Race.Dwarf, "Diggy diggy hole");
+            var DwarfWarrior = new Npc("Gimli", Models.Enums.Race.Dwarf, "");
+            var DwarfPaladin = new Npc("The Gilded One", Models.Enums.Race.Dwarf, "People keep making fun of my bronze hammer painted yellow");
+            var DwarfMage = new Npc("Glowstick Jarn", Models.Enums.Race.Dwarf, "I like frost spells. They're very cool");
+            var GoblinArcher = new Npc("");
         }
     }
 }

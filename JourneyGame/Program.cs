@@ -2,31 +2,24 @@
 
 namespace JourneyGame
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
+            // NOTES 
+            // Ascii font used = Doom
+            // Website = https://patorjk.com/software/taag/#p=display&f=Doom&t=John+Journey&x=none&v=4&h=4&w=80&we=false
+
             // Init game components here
-            var test = new Npc("Den store tester", Models.Enums.Race.Dwarf, "Du skal simpelthen opføre dig ordentligt!");
+            var gameMenus = new Menu();
+            //var test = new Npc("Den store tester", Models.Enums.Race.Dwarf, "Du skal simpelthen opføre dig ordentligt!");
 
-            string banner = @"
- __          __  _                            _          _   _                 _                                                                
- \ \        / / | |                          | |        | | | |               | |                                                               
-  \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___   | |_| |__   ___       | | ___  _   _ _ __ _ __   ___ _   _    __ _  __ _ _ __ ___   ___ 
-   \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  | __| '_ \ / _ \  _   | |/ _ \| | | | '__| '_ \ / _ \ | | |  / _` |/ _` | '_ ` _ \ / _ \
-    \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | |_| | | |  __/ | |__| | (_) | |_| | |  | | | |  __/ |_| | | (_| | (_| | | | | | |  __/
-     \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/   \__|_| |_|\___|  \____/ \___/ \__,_|_|  |_| |_|\___|\__, |  \__, |\__,_|_| |_| |_|\___|
-                                                                                                              __/ |   __/ |                     
-                                                                                                             |___/   |___/";
-
-            Console.WriteLine(banner);
-            Console.ReadLine(); // Keeps the console open
+            //Console.WriteLine($"{test.Name} \n{test.Dialogue}");
 
 
             // Game initialization and main loop would go here
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"{test.Name} \n{test.Dialogue}");
+            //gameMenus.StartMenu();
+            gameMenus.StartMenu();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace JourneyGame.Models
     /// </summary>
     public class Menu
     {
+		
         // ===========================================
         // CLASS PROPERTIES AND FIELDS
         // ===========================================

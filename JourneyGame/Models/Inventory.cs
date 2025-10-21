@@ -1,28 +1,45 @@
 ﻿namespace JourneyGame.Models
 {
-    public class Inventory
+    public static class Inventory
     {
-        public List<Item> items = new List<Item>();
-        public void AddItem(string name, int id)
-        {
-            items.Add(new Item(id, name));
+        private static List<Item> _items = new List<Item>();
 
-        }
-        public void RemoveItem(string name)
-        {
-            var itemToRemove = items.FirstOrDefault(i => i.Name == name);
-            if (itemToRemove != null)
-            {
-                items.Remove(itemToRemove);
-            }
+        public static IReadOnlyList<Item> Items => _items;
 
-        }
-        public void ShowIventory()
+        public static void AddItem(Item item)
         {
-            foreach (Item item in items)
+            _items.Add(item);
+            Console.WriteLine($"You added: {item.Name} - {item.Description}");
+        }
+
+        public static void RemoveItem(Item item)
+        {
+            if (_items.Remove(item))
+                Console.WriteLine($"You removed: {item.Name}");
+            else
+                Console.WriteLine($"Item not found in your inventory.");
+        }
+
+        public static void ShowInventory()
+        {
+            Console.WriteLine("\n=== Inventory ===");
+            if (_items.Count == 0)
             {
-                Console.WriteLine(item);
+                Console.WriteLine("Your inventory is empty.");
             }
+            else
+            {
+                foreach (var item in _items)
+                {
+                    Console.WriteLine($"{item.Name} - {item.Description}");
+                }
+            }
+            Console.WriteLine("=================\n");
+        }
+
+        public static void Clear()
+        {
+            _items.Clear();
         }
     }
 }

@@ -16,13 +16,11 @@ namespace JourneyGame.Models
         // Class objects
         public Error Error = new Error();
 
-        // Item repository
+        // Create an instance of your item repository
         ItemRepo itemRepo = new ItemRepo();
 
-        // Show the item in the room
-        int itemId = 3; // for example, Sock Sling
-        Item itemInRoom = ItemRepo.items.FirstOrDefault(i => i.Id == itemId);
-
+        // Set which item is in this room (e.g., the Sock Sling with Id = 3)
+        int itemId = -1;
 
         // Start menu properties
         public bool StartMenuLoop = true;
@@ -366,12 +364,89 @@ namespace JourneyGame.Models
                         Error.BasicException();
                     }
 
+                    // Define which items are in this room
+                    int itemId1 = 1; // Cactus Shield
+                    int itemId2 = 2; // Dice Set
+                    int itemId3 = 3; // Sock Sling
+                    int itemId4 = 4; // Mirror
+                    int itemId5 = 5; // Spoon
+                    int itemId6 = 6; // Photograh
+                    int itemId7 = 7; // Jacket
+                    int itemId8 = 8; // Moms Toy
+                    int itemId9 = 9; // House keys - Forgets this item game ends
+                    int itemId10 = 10; // Bird Book
+
+                    // Fetch them once
+                    var item1 = itemRepo.FindById(itemId1);
+                    var item2 = itemRepo.FindById(itemId2);
+                    var item3 = itemRepo.FindById(itemId3);
+                    var item4 = itemRepo.FindById(itemId4);
+                    var item5 = itemRepo.FindById(itemId5);
+                    var item6 = itemRepo.FindById(itemId6);
+                    var item7 = itemRepo.FindById(itemId7);
+                    var item8 = itemRepo.FindById(itemId8);
+                    var item9 = itemRepo.FindById(itemId9);
+                    var item10 = itemRepo.FindById(itemId10);
+
+                    // Then when the player chooses option 1 to check the room:
                     if (playerInput == 1)
                     {
                         Console.Clear();
-                        Console.WriteLine("Items avaliable in your room" +
-                            $"1. Sock Sling{Item.GetSpecificItem(3)}"
-                            );
+                        Console.WriteLine("Items available in your room:\n" +
+                            $"1. Pickup {item1.Name} - {item1.Description}\n" +
+                            $"2. Pickup {item2.Name} - {item2.Description}\n" +
+                            "3. Exit room without picking up items\n"
+                        );
+                        Console.Write("Select 1 of the options above");
+                        Console.WriteLine();
+
+                        if (!int.TryParse(Console.ReadLine(), out int choice))
+                        {
+                            Error.BasicException();
+                        }
+                        else
+                        {
+                            switch (choice)
+                            {
+                                case 1:
+                                    if (item1 != null)
+                                    {
+                                        Inventory.AddItem(item1);
+                                        Console.WriteLine($"You picked up: {item1.Name}");
+                                        itemRepo.items.Remove(item1);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("You already picked this item up");
+                                    }
+                                    break;
+                                case 2:
+                                    if (item2 != null)
+                                    {
+                                        Inventory.AddItem(item1);
+                                        Console.WriteLine($"You picked up: {item1.Name}");
+                                        itemRepo.items.Remove(item1);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("You already picked this item up");
+                                    }
+                                    break;
+                                case 3:
+                                    Console.WriteLine("\nYou leave the room without picking anything up.");
+                                    break;
+                                default:
+                                    Error.BasicException();
+                                    break;
+                            }
+                        }
+
+                        Console.WriteLine("\nPress Enter to continue...");
+                        Console.ReadLine();
+                    }
+                    else if (playerInput == 2)
+                    {
+                        PlayersBedroomLoop = false;
                     }
                 }
 
@@ -395,11 +470,13 @@ namespace JourneyGame.Models
                 }
                 catch
                 {
+                    playerMoves--;
                     Error.BasicException();
                 }
 
                 if (playerInput < 1 || playerInput > 4)
                 {
+                    playerMoves--;
                     Error.BasicException();
                 }
 

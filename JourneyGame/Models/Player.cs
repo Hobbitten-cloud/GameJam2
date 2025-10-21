@@ -14,8 +14,6 @@ namespace JourneyGame.Models
         public Race Race { get; set; }
         public Job Job { get; set; }
 
-        // Reference to the static inventory
-        public static Inventory InventoryRef => JourneyGame.Models.Inventory;
 
         public Player(string name, Race race, Job job)
         {

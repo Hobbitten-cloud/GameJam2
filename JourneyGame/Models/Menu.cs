@@ -27,8 +27,6 @@ namespace JourneyGame.Models
         // Item repository instance for managing all game items
         ItemRepo itemRepo = new ItemRepo();
 
-        // Legacy item ID field (currently unused but kept for potential future use)
-        int itemId = -1;
 
         // ===========================================
         // MENU LOOP CONTROL VARIABLES
@@ -52,13 +50,13 @@ namespace JourneyGame.Models
         // Controls the main house exploration menu
         public bool HouseMenuLoop = true;
 
-        // Legacy bedroom loop controls (kept for compatibility)
-        public bool PlayersBedroomLoop1 = true;
-        public bool PlayersBedroomLoop2 = true;
+        // Loop controls
+        //public bool PlayersBedroomLoop1 = true;
+        //public bool PlayersBedroomLoop2 = true;
+        //public bool HouseLocationLoop1 = true;
+        //public bool HouseLocationLoop2 = true;
+        //public bool HouseLocationLoop3 = true;
         bool firstLoop = true;
-        public bool HouseLocationLoop1 = true;
-        public bool HouseLocationLoop2 = true;
-        public bool HouseLocationLoop3 = true;
 
         // Controls the generic room item interaction loop
         public bool RoomItemLoop = true;

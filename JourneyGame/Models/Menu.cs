@@ -16,6 +16,12 @@ namespace JourneyGame.Models
         // Class objects
         public Error Error = new Error();
 
+        // Create an instance of your item repository
+        ItemRepo itemRepo = new ItemRepo();
+
+        // Set which item is in this room (e.g., the Sock Sling with Id = 3)
+        int itemId = -1;
+
         // Start menu properties
         public bool StartMenuLoop = true;
 
@@ -35,6 +41,7 @@ namespace JourneyGame.Models
         // House properties
         public int playerMoves = 30;
         public bool HouseMenuLoop = true;
+        public bool PlayersBedroomLoop = true;
         public bool HouseLocationLoop1 = true;
         public bool HouseLocationLoop2 = true;
         public bool HouseLocationLoop3 = true;
@@ -333,10 +340,119 @@ namespace JourneyGame.Models
                 // MAKE A ITEM SYSTEM THAT CAN ALLOW THE PLAYER TO PICK UP ITEMS AND STORE THEM IN THEIR INVENTORY
 
                 // Navigation information
-                Console.WriteLine($"You are currently at: {playerName} bedroom ");
-                Console.WriteLine($"You have {playerMoves} moves left");
-                Console.WriteLine();
+                while (PlayersBedroomLoop == true)
+                {
+                    Console.WriteLine($"You are currently at: {playerName}'s bedroom ");
+                    Console.WriteLine($"You have {playerMoves} moves left");
+                    Console.WriteLine();
+                    Console.WriteLine("Do you want to grab some items from your room before leaving?\n" +
+                        "1. Yes \n" +
+                        "2. No\n"
+                    );
+                    Console.Write("Write your input: ");
+                    try
+                    {
+                        playerInput = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Error.BasicException();
+                    }
 
+                    if (playerInput < 1 || playerInput > 2)
+                    {
+                        Error.BasicException();
+                    }
+
+                    // Define which items are in this room
+                    int itemId1 = 1; // Cactus Shield
+                    int itemId2 = 2; // Dice Set
+                    int itemId3 = 3; // Sock Sling
+                    int itemId4 = 4; // Mirror
+                    int itemId5 = 5; // Spoon
+                    int itemId6 = 6; // Photograh
+                    int itemId7 = 7; // Jacket
+                    int itemId8 = 8; // Moms Toy
+                    int itemId9 = 9; // House keys - Forgets this item game ends
+                    int itemId10 = 10; // Bird Book
+
+                    // Fetch them once
+                    var item1 = itemRepo.FindById(itemId1);
+                    var item2 = itemRepo.FindById(itemId2);
+                    var item3 = itemRepo.FindById(itemId3);
+                    var item4 = itemRepo.FindById(itemId4);
+                    var item5 = itemRepo.FindById(itemId5);
+                    var item6 = itemRepo.FindById(itemId6);
+                    var item7 = itemRepo.FindById(itemId7);
+                    var item8 = itemRepo.FindById(itemId8);
+                    var item9 = itemRepo.FindById(itemId9);
+                    var item10 = itemRepo.FindById(itemId10);
+
+                    // Then when the player chooses option 1 to check the room:
+                    if (playerInput == 1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Items available in your room:\n" +
+                            $"1. Pickup {item1.Name} - {item1.Description}\n" +
+                            $"2. Pickup {item2.Name} - {item2.Description}\n" +
+                            "3. Exit room without picking up items\n"
+                        );
+                        Console.Write("Select 1 of the options above");
+                        Console.WriteLine();
+
+                        if (!int.TryParse(Console.ReadLine(), out int choice))
+                        {
+                            Error.BasicException();
+                        }
+                        else
+                        {
+                            switch (choice)
+                            {
+                                case 1:
+                                    if (item1 != null)
+                                    {
+                                        Inventory.AddItem(item1);
+                                        Console.WriteLine($"You picked up: {item1.Name}");
+                                        itemRepo.items.Remove(item1);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("You already picked this item up");
+                                    }
+                                    break;
+                                case 2:
+                                    if (item2 != null)
+                                    {
+                                        Inventory.AddItem(item1);
+                                        Console.WriteLine($"You picked up: {item1.Name}");
+                                        itemRepo.items.Remove(item1);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("You already picked this item up");
+                                    }
+                                    break;
+                                case 3:
+                                    Console.WriteLine("\nYou leave the room without picking anything up.");
+                                    break;
+                                default:
+                                    Error.BasicException();
+                                    break;
+                            }
+                        }
+
+                        Console.WriteLine("\nPress Enter to continue...");
+                        Console.ReadLine();
+                    }
+                    else if (playerInput == 2)
+                    {
+                        PlayersBedroomLoop = false;
+                    }
+                }
+
+
+
+                playerInput = 0;
                 Console.WriteLine(
                     // ASCII Art Title
                     " _   _             _             _   _             \r\n| \\ | |           (_)           | | (_)            \r\n|  \\| | __ ___   ___  __ _  __ _| |_ _  ___  _ __  \r\n| . ` |/ _` \\ \\ / / |/ _` |/ _` | __| |/ _ \\| '_ \\ \r\n| |\\  | (_| |\\ V /| | (_| | (_| | |_| | (_) | | | |\r\n\\_| \\_/\\__,_| \\_/ |_|\\__, |\\__,_|\\__|_|\\___/|_| |_|\r\n                      __/ |                        \r\n                     |___/                         \n" +
@@ -354,26 +470,51 @@ namespace JourneyGame.Models
                 }
                 catch
                 {
+                    playerMoves--;
+                    Error.BasicException();
+                }
+
+                if (playerInput < 1 || playerInput > 4)
+                {
+                    playerMoves--;
                     Error.BasicException();
                 }
 
                 playerMoves--;
+                string livingRoom = "Living Room";
+                string kitchen = "Kitchen";
+                string bathroom = "Bathroom";
+                string parentsBedroom = "Parents Bedroom";
 
-                switch (playerInput)
+                // Choose starter location
+                while (HouseLocationLoop1 == true)
                 {
-                    case 1:
-                        currentLocation = "Living Room";
-                        break;
-                    case 2:
-                        currentLocation = "Kitchen";
-                        break;
-                    case 3:
-                        currentLocation = "Bathroom";
-                        break;
-                    case 4:
-                        currentLocation = "Parents Bedroom";
-                        break;
+                    switch (playerInput)
+                    {
+                        case 1:
+                            currentLocation = livingRoom;
+                            break;
+                        case 2:
+                            currentLocation = kitchen;
+                            break;
+                        case 3:
+                            currentLocation = bathroom;
+                            break;
+                        case 4:
+                            currentLocation = parentsBedroom;
+                            break;
+                    }
+                    if (playerInput < 1 || playerInput > 4)
+                    {
+                        Console.WriteLine($"Your now at the {currentLocation}");
+                    }
+
+                    if (currentLocation == livingRoom)
+                    {
+
+                    }
                 }
+
 
                 if (playerMoves <= 0)
                 {

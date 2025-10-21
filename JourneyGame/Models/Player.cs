@@ -14,6 +14,7 @@ namespace JourneyGame.Models
         public Job Job { get; set; }
         public double PublicRelations { get; set; }
 
+
         public Player(string name, Race race, Job job)
         {
             Name = name;

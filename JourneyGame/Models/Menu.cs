@@ -248,7 +248,7 @@ namespace JourneyGame.Models
                 while (CharacterLoop4 == true)
                 {
                     Console.WriteLine($"Character Details: \n\n" +
-                        $"Name: {playerName} \n" +
+                        $"Name: {playerName} - {newPlayer.Title} \n" +
                         $"Race: {playerRace.ToString()} \n" +
                         $"Class: {playerJob.ToString()}");
 

@@ -16,6 +16,14 @@ namespace JourneyGame.Models
         // Class objects
         public Error Error = new Error();
 
+        // Item repository
+        ItemRepo itemRepo = new ItemRepo();
+
+        // Show the item in the room
+        int itemId = 3; // for example, Sock Sling
+        Item itemInRoom = ItemRepo.items.FirstOrDefault(i => i.Id == itemId);
+
+
         // Start menu properties
         public bool StartMenuLoop = true;
 
@@ -35,6 +43,7 @@ namespace JourneyGame.Models
         // House properties
         public int playerMoves = 30;
         public bool HouseMenuLoop = true;
+        public bool PlayersBedroomLoop = true;
         public bool HouseLocationLoop1 = true;
         public bool HouseLocationLoop2 = true;
         public bool HouseLocationLoop3 = true;
@@ -333,10 +342,42 @@ namespace JourneyGame.Models
                 // MAKE A ITEM SYSTEM THAT CAN ALLOW THE PLAYER TO PICK UP ITEMS AND STORE THEM IN THEIR INVENTORY
 
                 // Navigation information
-                Console.WriteLine($"You are currently at: {playerName} bedroom ");
-                Console.WriteLine($"You have {playerMoves} moves left");
-                Console.WriteLine();
+                while (PlayersBedroomLoop == true)
+                {
+                    Console.WriteLine($"You are currently at: {playerName}'s bedroom ");
+                    Console.WriteLine($"You have {playerMoves} moves left");
+                    Console.WriteLine();
+                    Console.WriteLine("Do you want to grab some items from your room before leaving?\n" +
+                        "1. Yes \n" +
+                        "2. No\n"
+                    );
+                    Console.Write("Write your input: ");
+                    try
+                    {
+                        playerInput = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Error.BasicException();
+                    }
 
+                    if (playerInput < 1 || playerInput > 2)
+                    {
+                        Error.BasicException();
+                    }
+
+                    if (playerInput == 1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Items avaliable in your room" +
+                            $"1. Sock Sling{Item.GetSpecificItem(3)}"
+                            );
+                    }
+                }
+
+
+
+                playerInput = 0;
                 Console.WriteLine(
                     // ASCII Art Title
                     " _   _             _             _   _             \r\n| \\ | |           (_)           | | (_)            \r\n|  \\| | __ ___   ___  __ _  __ _| |_ _  ___  _ __  \r\n| . ` |/ _` \\ \\ / / |/ _` |/ _` | __| |/ _ \\| '_ \\ \r\n| |\\  | (_| |\\ V /| | (_| | (_| | |_| | (_) | | | |\r\n\\_| \\_/\\__,_| \\_/ |_|\\__, |\\__,_|\\__|_|\\___/|_| |_|\r\n                      __/ |                        \r\n                     |___/                         \n" +
@@ -357,23 +398,46 @@ namespace JourneyGame.Models
                     Error.BasicException();
                 }
 
-                playerMoves--;
-
-                switch (playerInput)
+                if (playerInput < 1 || playerInput > 4)
                 {
-                    case 1:
-                        currentLocation = "Living Room";
-                        break;
-                    case 2:
-                        currentLocation = "Kitchen";
-                        break;
-                    case 3:
-                        currentLocation = "Bathroom";
-                        break;
-                    case 4:
-                        currentLocation = "Parents Bedroom";
-                        break;
+                    Error.BasicException();
                 }
+
+                playerMoves--;
+                string livingRoom = "Living Room";
+                string kitchen = "Kitchen";
+                string bathroom = "Bathroom";
+                string parentsBedroom = "Parents Bedroom";
+
+                // Choose starter location
+                while (HouseLocationLoop1 == true)
+                {
+                    switch (playerInput)
+                    {
+                        case 1:
+                            currentLocation = livingRoom;
+                            break;
+                        case 2:
+                            currentLocation = kitchen;
+                            break;
+                        case 3:
+                            currentLocation = bathroom;
+                            break;
+                        case 4:
+                            currentLocation = parentsBedroom;
+                            break;
+                    }
+                    if (playerInput < 1 || playerInput > 4)
+                    {
+                        Console.WriteLine($"Your now at the {currentLocation}");
+                    }
+
+                    if (currentLocation == livingRoom)
+                    {
+
+                    }
+                }
+
 
                 if (playerMoves <= 0)
                 {

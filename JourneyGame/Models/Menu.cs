@@ -529,9 +529,13 @@ namespace JourneyGame.Models
 		{
 			//if items do anything
 		}
+		//Straight up doesn't work ¯\_(ツ)_/¯
 		public void Run()
 		{
 			//You haul ass - maybe some enemies can trip you 
+			//how to break twice?
+			Console.WriteLine("RUNAWAY!");
+			Thread.Sleep(1000);
 		}
 		public int RollD20()
 		{

@@ -92,7 +92,9 @@ namespace JourneyGame.Models
         /// </summary>
         public void StartMenu()
         {
+            // Set console output encoding to UTF-8 for special characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
             // Main menu loop - continues until user makes a valid selection
             while (StartMenuLoop == true)
             {

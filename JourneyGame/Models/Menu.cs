@@ -10,7 +10,6 @@ namespace JourneyGame.Models
     /// </summary>
     public class Menu
     {
-
         // ===========================================
         // CLASS PROPERTIES AND FIELDS
         // ===========================================
@@ -622,7 +621,6 @@ namespace JourneyGame.Models
             }
         }
 
-
         // ===========================================
         // ROOM ITEM INTERACTION SYSTEM
         // ===========================================
@@ -984,7 +982,6 @@ namespace JourneyGame.Models
             // World menu logic here - to be implemented for future game features
             // This could include outdoor exploration, shops, NPCs, etc.
         }
-
 
         // ===========================================
         // COMBAT MENU

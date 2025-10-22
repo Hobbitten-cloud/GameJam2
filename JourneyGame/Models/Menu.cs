@@ -564,7 +564,7 @@ namespace JourneyGame.Models
                         HandleRoomItems(parentsBedroom, parentsBedroomItems);
                         break;
                     case 5:
-                        // Parents Bedroom - Items: Mom's Toy (ID: 8), House keys (ID: 9)
+                        // View Inventory selected
                         Console.Clear();
                         Inventory.ShowInventory();
                         Console.Write("Press anything to continue: ");

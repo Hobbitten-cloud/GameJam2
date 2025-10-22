@@ -93,7 +93,7 @@ namespace JourneyGame.Models
         public void StartMenu()
         {
             Task.Run(() => Program.PlayMusic("Resources/Music/MenuMusic.mp3"));
-            CombatMenu();
+            //CombatMenu();
             // Set console output encoding to UTF-8 for special characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 

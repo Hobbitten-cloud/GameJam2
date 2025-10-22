@@ -1,12 +1,6 @@
 ﻿using JourneyGame.Models.Enums;
 using JourneyGame.Models.ExceptionHandling;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using JourneyGame.Repo;
 
 namespace JourneyGame.Models
 {
@@ -16,31 +10,33 @@ namespace JourneyGame.Models
     /// </summary>
     public class Menu
     {
-		
+
         // ===========================================
         // CLASS PROPERTIES AND FIELDS
         // ===========================================
         #region Properties and Fields
-        
+
         // Error handling object for managing exceptions throughout the game
         public Error Error = new Error();
 
         // Item repository instance for managing all game items
         ItemRepo itemRepo = new ItemRepo();
 
-        // Legacy item ID field (currently unused but kept for potential future use)
-        int itemId = -1;
+        new Player newPlayer;
+
+        // Random number generator for house key placement
+        private Random random = new Random();
 
         // ===========================================
         // MENU LOOP CONTROL VARIABLES
         // ===========================================
-        
+
         // Controls the main start menu loop
         public bool StartMenuLoop = true;
 
         // Controls the character creation menu loop
         public bool CharacterCreationMenuLoop = true;
-        
+
         // Character creation sub-loop controls for each step
         public bool CharacterLoop1 = true; // Race selection loop
         public bool CharacterLoop2 = true; // Job/Class selection loop
@@ -52,30 +48,31 @@ namespace JourneyGame.Models
 
         // Controls the main house exploration menu
         public bool HouseMenuLoop = true;
-        
-        // Legacy bedroom loop controls (kept for compatibility)
-        public bool PlayersBedroomLoop1 = true;
-        public bool PlayersBedroomLoop2 = true;
-        public bool HouseLocationLoop1 = true;
-        public bool HouseLocationLoop2 = true;
-        public bool HouseLocationLoop3 = true;
-        
+
+        // Loop controls
+        //public bool PlayersBedroomLoop1 = true;
+        //public bool PlayersBedroomLoop2 = true;
+        //public bool HouseLocationLoop1 = true;
+        //public bool HouseLocationLoop2 = true;
+        //public bool HouseLocationLoop3 = true;
+        bool firstLoop = true;
+
         // Controls the generic room item interaction loop
         public bool RoomItemLoop = true;
 
         // ===========================================
         // PLAYER DATA PROPERTIES
         // ===========================================
-        
+
         // Player's selected race from the Race enum
         public Race playerRace = 0;
-        
+
         // Player's selected job/class from the Job enum
         public Job playerJob = 0;
-        
+
         // Player's chosen name
         public string playerName = "";
-        
+
         // Number of moves remaining for house exploration (starts at 30)
         public int playerMoves = 30;
 
@@ -98,7 +95,7 @@ namespace JourneyGame.Models
                 // Display the game title in green ASCII art
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("   ___       _               ___                                   \r\n  |_  |     | |             |_  |                                  \r\n    | | ___ | |__  _ __       | | ___  _   _ _ __ _ __   ___ _   _ \r\n    | |/ _ \\| '_ \\| '_ \\      | |/ _ \\| | | | '__| '_ \\ / _ \\ | | |\r\n/\\__/ / (_) | | | | | | | /\\__/ / (_) | |_| | |  | | | |  __/ |_| |\r\n\\____/ \\___/|_| |_|_| |_| \\____/ \\___/ \\__,_|_|  |_| |_|\\___|\\__, |\r\n                                                              __/ |\r\n                                                             |___/ ");
-                
+
                 // Reset console color to white for menu options
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("1. Start New Game");
@@ -108,7 +105,7 @@ namespace JourneyGame.Models
                 Console.Write("Write your input: ");
 
                 int PlayerInput = 0;
-                
+
                 // Get and validate player input with error handling
                 try
                 {
@@ -126,7 +123,7 @@ namespace JourneyGame.Models
                     // Start New Game selected
                     StartMenuLoop = false; // Exit the start menu loop
                     Console.Clear();
-                    
+
                     // Display game backstory to set the scene
                     Console.WriteLine(
                         "Backstory: \n" +
@@ -137,7 +134,7 @@ namespace JourneyGame.Models
                         );
                     Console.Write("\nPress anything to continue ");
                     Console.ReadLine();
-                    
+
                     // Proceed to character creation
                     CharacterCreationMenu();
                 }
@@ -151,7 +148,7 @@ namespace JourneyGame.Models
                     Console.Write("Press any key to return: ");
                     Console.ReadLine();
                     Console.Clear();
-                    
+
                     // Return to start menu
                     StartMenu();
                 }
@@ -332,7 +329,7 @@ namespace JourneyGame.Models
                         Error.BasicException();
                     }
                 }
-                
+
                 Console.Clear();
                 playerInput = 0; // Reset player input for confirmation
                 CharacterLoop4 = true; // Reset confirmation loop
@@ -340,10 +337,10 @@ namespace JourneyGame.Models
                 // ===========================================
                 // STEP 4: CHARACTER CONFIRMATION
                 // ===========================================
-                
+
                 // Create player object to display stats
                 var newPlayer = new Player(playerName, playerRace, playerJob);
-                
+
                 while (CharacterLoop4 == true)
                 {
                     // Display character summary for confirmation
@@ -359,7 +356,7 @@ namespace JourneyGame.Models
                     Console.WriteLine("2. No");
                     Console.WriteLine();
                     Console.Write("Your answer: ");
-                    
+
                     try
                     {
                         playerInput = Convert.ToInt32(Console.ReadLine());
@@ -419,7 +416,7 @@ namespace JourneyGame.Models
 
                 Console.WriteLine();
                 Console.Write("Type 1: to continue: ");
-                
+
                 // Get and validate player input
                 try
                 {
@@ -456,22 +453,30 @@ namespace JourneyGame.Models
             string currentLocation = "";
             int playerInput = 0;
 
+            // Randomly place house keys in one of the rooms (1-4: Living Room, Kitchen, Bathroom, Parents Bedroom)
+            int roomWithKeys = random.Next(1, 5);
+
             // Main house exploration loop - continues until player runs out of moves
             while (HouseMenuLoop == true)
             {
                 // ===========================================
-                // STARTING LOCATION: PLAYER'S BEDROOM
+                // STARTING LOCATION: PLAYER'S BEDROOM (ONLY ONCE)
                 // ===========================================
-                
-                // Handle bedroom items first (starting location)
-                // Items available: Cactus Shield (ID: 1), Sock Sling (ID: 3)
-                int[] bedroomItems = { 1, 3 };
-                HandleRoomItems($"{playerName}'s bedroom", bedroomItems);
+
+                // Only handle bedroom items on the first loop iteration
+                if (firstLoop == true)
+                {
+                    // Handle bedroom items first (starting location)
+                    // Items available: Cactus Shield (ID: 1), Sock Sling (ID: 3)
+                    int[] bedroomItems = { 1, 3 };
+                    HandleRoomItems($"{playerName}'s bedroom", bedroomItems);
+                    firstLoop = false; // Mark that bedroom has been visited
+                    Console.Clear();
+                }
 
                 // ===========================================
                 // ROOM NAVIGATION MENU
                 // ===========================================
-                
                 // Display navigation options with ASCII art
                 Console.WriteLine(
                     // ASCII Art Title
@@ -479,11 +484,13 @@ namespace JourneyGame.Models
                     "1. Go to the Living Room \n" +
                     "2. Go to the Kitchen \n" +
                     "3. Go to the Bathroom \n" +
-                    "4. Go to your parents bedroom \n"
+                    "4. Go to your parents bedroom \n" +
+                    "5. Check your inventory \n" +
+                    "6. Exit house"
                 );
 
                 Console.Write("Write your input: ");
-                
+
                 // Get and validate navigation input
                 try
                 {
@@ -497,7 +504,7 @@ namespace JourneyGame.Models
                 }
 
                 // Validate input range (1-4)
-                if (playerInput < 1 || playerInput > 4)
+                if (playerInput < 1 || playerInput > 6)
                 {
                     // Invalid input costs a move and shows error
                     playerMoves--;
@@ -506,17 +513,19 @@ namespace JourneyGame.Models
 
                 // Moving to any room costs 1 move
                 playerMoves--;
-                
+
                 // Define room names for clarity
                 string livingRoom = "Living Room";
                 string kitchen = "Kitchen";
                 string bathroom = "Bathroom";
                 string parentsBedroom = "Parents Bedroom";
+                string viewPlayerInventory = "Inventory";
+                string exitHouse = "Exit House";
 
                 // ===========================================
                 // ROOM SELECTION AND ITEM HANDLING
                 // ===========================================
-                
+
                 // Navigate to selected room and handle its items
                 switch (playerInput)
                 {
@@ -524,45 +533,73 @@ namespace JourneyGame.Models
                         // Living Room - Items: Dice Set (ID: 2), Mirror (ID: 4), Photograph (ID: 6)
                         Console.Clear();
                         currentLocation = livingRoom;
-                        int[] livingRoomItems = { 2, 4, 6 };
+                        int[] livingRoomItems = roomWithKeys == 1 ? new int[] { 2, 4, 6, 9 } : new int[] { 2, 4, 6 };
                         HandleRoomItems(livingRoom, livingRoomItems);
                         break;
                     case 2:
                         // Kitchen - Items: Spoon (ID: 5), Bird Book (ID: 10)
                         Console.Clear();
                         currentLocation = kitchen;
-                        int[] kitchenItems = { 5, 10 };
+                        int[] kitchenItems = roomWithKeys == 2 ? new int[] { 5, 10, 9 } : new int[] { 5, 10 };
                         HandleRoomItems(kitchen, kitchenItems);
                         break;
                     case 3:
                         // Bathroom - Items: Jacket (ID: 7)
                         Console.Clear();
                         currentLocation = bathroom;
-                        int[] bathroomItems = { 7 };
+                        int[] bathroomItems = roomWithKeys == 3 ? new int[] { 7, 9 } : new int[] { 7 };
                         HandleRoomItems(bathroom, bathroomItems);
                         break;
                     case 4:
                         // Parents Bedroom - Items: Mom's Toy (ID: 8), House keys (ID: 9)
                         Console.Clear();
                         currentLocation = parentsBedroom;
-                        int[] parentsBedroomItems = { 8, 9 };
+                        int[] parentsBedroomItems = roomWithKeys == 4 ? new int[] { 8, 9 } : new int[] { 8 };
                         HandleRoomItems(parentsBedroom, parentsBedroomItems);
+                        break;
+                    case 5:
+                        // Parents Bedroom - Items: Mom's Toy (ID: 8), House keys (ID: 9)
+                        Console.Clear();
+                        Inventory.ShowInventory();
+                        Console.Write("Press anything to continue: ");
+                        Console.ReadLine();
+                        Console.Clear();
+                        break;
+                    case 6:
+                        // Exit House selected - check if player has house keys
+                        Console.Clear();
+                        bool hasHouseKeys = Inventory.Items.Any(item => item.Id == 9); // House keys have ID 9
+
+                        if (hasHouseKeys)
+                        {
+                            // Player has house keys - allow exit
+                            HouseMenuLoop = false;
+                            Console.WriteLine("You use the house keys to unlock the door and leave the house.");
+                            Console.WriteLine("Congratulations! You have successfully escaped!");
+                            Console.Write("Press any key to continue: ");
+                            Console.ReadLine();
+                        }
+                        else
+                        {
+                            // Player doesn't have house keys - can't exit
+                            Console.WriteLine("You try to leave the house, but the door is locked.");
+                            Console.WriteLine("You need the house keys to unlock the door!");
+                            Console.Write("Press any key to continue: ");
+                            Console.ReadLine();
+                            Console.Clear();
+                        }
                         break;
                 }
 
                 // ===========================================
                 // MOVE LIMIT CHECK
                 // ===========================================
-                
+
                 // Check if player has run out of moves
                 if (playerMoves <= 0)
                 {
                     HouseMenuLoop = false; // Exit house exploration
-                    Console.WriteLine("You have run out of moves! Time to leave the house.");
-                    Console.Write("Press any key to continue: ");
-                    Console.ReadLine();
-                    Console.Clear();
-                    WorldMenu(); // Proceed to world menu
+                    GameOverMenu(); // Show game over menu
                 }
             }
         }
@@ -596,35 +633,86 @@ namespace JourneyGame.Models
                     "2. No\n"
                 );
                 Console.Write("Write your input: ");
-                
-                // Get and validate initial choice
-                try
+
+                // Get and validate initial choice with proper error handling
+                bool validInput = false;
+                while (!validInput)
                 {
-                    playerInput = Convert.ToInt32(Console.ReadLine());
-                }
-                catch
-                {
-                    Error.BasicException();
+                    try
+                    {
+                        string input = Console.ReadLine();
+
+                        // Check if input is empty or just whitespace
+                        if (string.IsNullOrWhiteSpace(input))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Please enter a valid number - not whitespace");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write("Write your input: ");
+                            continue;
+                        }
+
+                        playerInput = Convert.ToInt32(input);
+
+                        // Validate input range
+                        if (playerInput >= 1 && playerInput <= 2)
+                        {
+                            validInput = true;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Please enter 1 or 2.");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write("Write your input: ");
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Please enter a valid number (no letters or special characters).");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("Write your input: ");
+                    }
+                    catch (OverflowException)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("The number you entered is too large. Please try again.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("Write your input: ");
+                    }
+                    catch
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Invalid input. Please try again.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("Write your input: ");
+                    }
                 }
 
-                if (playerInput < 1 || playerInput > 2)
+                if (playerInput == 2)
                 {
-                    Error.BasicException();
+                    // Player chose not to look for items - exit room interaction
+                    // If this is the bedroom (firstLoop), mark it as completed
+                    if (firstLoop == true)
+                    {
+                        firstLoop = false;
+                    }
+                    RoomItemLoop = false;
                 }
-
-                if (playerInput == 1)
+                else if (playerInput == 1)
                 {
                     // Player wants to look for items
                     Console.Clear();
                     playerInput = 0;
-                    
+
                     // Item selection loop - continues until player exits or picks up items
                     while (RoomItemLoop == true)
                     {
                         // ===========================================
                         // BUILD AVAILABLE ITEMS LIST
                         // ===========================================
-                        
+
                         // Create lists to track available items and menu options
                         var availableItems = new List<(int id, Item item)>();
                         var itemOptions = new List<string>();
@@ -645,14 +733,14 @@ namespace JourneyGame.Models
                         // ===========================================
                         // HANDLE EMPTY ROOM SCENARIO
                         // ===========================================
-                        
+
                         if (availableItems.Count == 0)
                         {
                             // No items available - all have been picked up
                             Console.WriteLine("No items available in this room.");
                             Console.WriteLine("1. Exit room");
                             Console.Write("Select a choice: ");
-                            
+
                             try
                             {
                                 playerInput = Convert.ToInt32(Console.ReadLine());
@@ -664,14 +752,10 @@ namespace JourneyGame.Models
 
                             if (playerInput == 1)
                             {
-                                // Exit room and show inventory
+                                // Exit room
                                 Console.Clear();
                                 Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("You leave the room");
-                                Inventory.ShowInventory();
-                                Console.Write("Press anything to continue: ");
-                                Console.ReadLine();
-                                Console.Clear();
+                                Console.WriteLine("You left the room");
                                 RoomItemLoop = false;
                                 return;
                             }
@@ -685,7 +769,7 @@ namespace JourneyGame.Models
                             // ===========================================
                             // DISPLAY AVAILABLE ITEMS
                             // ===========================================
-                            
+
                             Console.WriteLine("Items available in this room:\n");
                             foreach (var option in itemOptions)
                             {
@@ -709,15 +793,12 @@ namespace JourneyGame.Models
                                 Error.BasicException();
                             }
 
-                            if (playerInput == optionNumber) // Exit room selected
+                            if (playerInput == optionNumber)
                             {
+                                // Exit room
                                 Console.Clear();
                                 Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("You leave the room");
-                                Inventory.ShowInventory();
-                                Console.Write("Press anything to continue: ");
-                                Console.ReadLine();
-                                Console.Clear();
+                                Console.WriteLine("You left the room");
                                 RoomItemLoop = false;
                                 return;
                             }
@@ -726,10 +807,10 @@ namespace JourneyGame.Models
                                 // ===========================================
                                 // ITEM PICKUP LOGIC
                                 // ===========================================
-                                
+
                                 var selectedItem = availableItems[playerInput - 1];
                                 var pickItem = itemRepo.FindById(selectedItem.id);
-                                
+
                                 if (pickItem != null)
                                 {
                                     // Item is available - pick it up
@@ -757,10 +838,117 @@ namespace JourneyGame.Models
                         }
                     }
                 }
+            }
+        }
+
+        // ===========================================
+        // GAME OVER AND RESTART MENU
+        // ===========================================
+
+        /// <summary>
+        /// Displays the game over menu when the player runs out of moves.
+        /// Allows the player to restart the game or return to the main menu.
+        /// </summary>
+        public void GameOverMenu()
+        {
+            Console.Clear();
+            int playerInput = 0;
+            bool gameOverLoop = true;
+
+            while (gameOverLoop == true)
+            {
+                // Display game over screen with ASCII art
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("  _____                         ____                 \r\n / ____|                       / __ \\                \r\n| |  __  __ _ _ __ ___   ___  ___| |  | |_   _____ _ __ \r\n| | |_ |/ _` | '_ ` _ \\ / _ \\/ __| |  | | | | / _ \\ '__|\r\n| |__| | (_| | | | | | |  __/ (__| |__| | |_| |  __/ |   \r\n \\_____|\\__,_|_| |_| |_|\\___|\\___|\\___\\_\\\\__,_|\\___|_|   \r\n                                                         \r\n                                                         ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("You have run out of moves!");
+                Console.WriteLine("Time's up - you couldn't escape the house in time.");
+                Console.WriteLine();
+                Console.WriteLine($"Items collected: {Inventory.Items.Count}");
+                Console.WriteLine();
+                Console.WriteLine("What would you like to do?");
+                Console.WriteLine("1. Restart Game");
+                Console.WriteLine("2. Return to Main Menu");
+                Console.WriteLine("3. Quit");
+                Console.WriteLine();
+                Console.Write("Write your input: ");
+
+                // Get and validate player input
+                try
+                {
+                    playerInput = Convert.ToInt32(Console.ReadLine());
+                }
+                catch
+                {
+                    Error.BasicException();
+                }
+
+                if (playerInput >= 1 && playerInput <= 3)
+                {
+                    switch (playerInput)
+                    {
+                        case 1:
+                            // Restart Game - reset all game state and start over
+                            Console.Clear();
+                            Console.WriteLine("Restarting game...");
+                            Console.Write("Press any key to continue: ");
+                            Console.ReadLine();
+
+                            // Reset all game state
+                            playerMoves = 30;
+                            firstLoop = true;
+                            HouseMenuLoop = true;
+                            RoomItemLoop = true;
+                            Inventory.Clear(); // Clear inventory
+
+                            // Reset item repository (put all items back)
+                            itemRepo = new ItemRepo();
+
+                            Console.Clear();
+                            gameOverLoop = false;
+                            HouseMenu(); // Restart house exploration
+                            break;
+                        case 2:
+                            // Return to Main Menu
+                            Console.Clear();
+                            Console.WriteLine("Returning to main menu...");
+                            Console.Write("Press any key to continue: ");
+                            Console.ReadLine();
+
+                            // Reset all game state
+                            playerMoves = 30;
+                            firstLoop = true;
+                            HouseMenuLoop = true;
+                            RoomItemLoop = true;
+                            StartMenuLoop = true;
+                            CharacterCreationMenuLoop = true;
+                            CharacterLoop1 = true;
+                            CharacterLoop2 = true;
+                            CharacterLoop3 = true;
+                            CharacterLoop4 = true;
+                            HouseRules = true;
+                            Inventory.Clear(); // Clear inventory
+
+                            // Reset item repository
+                            itemRepo = new ItemRepo();
+
+                            Console.Clear();
+                            gameOverLoop = false;
+                            StartMenu(); // Return to start menu
+                            break;
+                        case 3:
+                            // Quit Game
+                            Console.Clear();
+                            Console.WriteLine("Thanks for playing!");
+                            Console.Write("Press any key to exit: ");
+                            Console.ReadLine();
+                            Environment.Exit(0);
+                            break;
+                    }
+                }
                 else
                 {
-                    // Player chose not to look for items - exit room interaction
-                    RoomItemLoop = false;
+                    Error.BasicException();
                 }
             }
         }
@@ -777,6 +965,194 @@ namespace JourneyGame.Models
         {
             // World menu logic here - to be implemented for future game features
             // This could include outdoor exploration, shops, NPCs, etc.
+        }
+
+
+        // ===========================================
+        // COMBAT MENU
+        // ===========================================
+        public bool InCombat = true;
+        public bool PlayerChooseCombatAction = true;
+        public void CombatMenu()
+        {
+            //Test player - fjern når fulde program køres
+            newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
+
+            //Test enemy
+            Enemy enemy = new Enemy("JohnSouls", 10, 5, Race.Orc);
+
+            Console.Clear();
+            int playerInput = 0;
+
+            Console.WriteLine($"You are fighting {enemy.Name}\n");
+            //need access to the player somehow
+            while (newPlayer.Health > 0 && enemy.Health > 0)
+            {
+                while (PlayerChooseCombatAction == true)
+                {
+                    Console.WriteLine("What will you do?");
+                    Console.WriteLine(
+                           "1. Attack \n" +
+                           "2. Cast spell \n" +
+                           "3. Use item \n" +
+                           "4. Run \n"
+                    // add more options?
+                    );
+
+                    Console.Write("Write your input: ");
+                    try
+                    {
+                        playerInput = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Error.BasicException();
+                    }
+
+                    if (playerInput < 1 || playerInput > 4)
+                    {
+                        Error.BasicException();
+                    }
+
+                    switch (playerInput)
+                    {
+                        case 1:
+                            PlayerChooseCombatAction = false;
+                            Console.WriteLine($"{newPlayer.Name} is attacking {enemy.Name}\n");
+                            int tempdie = RollD20();
+                            Console.WriteLine($"Roll 10 or more to hit");
+                            Console.WriteLine($"You rolled {tempdie}");
+                            Thread.Sleep(1000);
+
+                            if (tempdie >= 10)
+                            {
+                                Console.WriteLine("You roll a d10 to determine your damage");
+                                int d10 = RollD10();
+                                Thread.Sleep(500);
+                                Console.WriteLine($"You rolled {d10}");
+                                Thread.Sleep(500);
+                                enemy.TakeDamage(d10);
+                                Console.WriteLine($"{enemy.Name} takes {d10} damage");
+                            }
+                            else
+                            {
+                                Thread.Sleep(500);
+                                Console.WriteLine($"your roll is to low - miss");
+                            }
+                            Console.WriteLine("Press anything to continue");
+                            Console.ReadLine();
+                            Console.Clear();
+                            break;
+                        case 2:
+                            CastSpell();
+                            break;
+                        case 3:
+                            Console.Clear();
+                            UseItem();
+                            Console.Write("Press anything to contine: ");
+                            Console.ReadLine();
+                            break;
+                        case 4:
+                            Console.Clear();
+                            InCombat = false;
+                            PlayerChooseCombatAction = false;
+                            Console.WriteLine("You ran away!");
+                            Thread.Sleep(1000);
+                            break;
+                    }
+                }
+
+                // Breaks the loop incase the player choose to end the fight
+                if (InCombat == false)
+                {
+                    break;
+                }
+
+                Console.Clear();
+                if (enemy.Health <= 0)
+                {
+                    Console.WriteLine($"{enemy.Name} is dead - VICTORY");
+                    Thread.Sleep(5000);
+                    break;
+                }
+
+                //Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
+                //Console.WriteLine("Press anything to continue");
+                //if(newPlayer.Health <= 0 || enemy.Health <= 0)
+                //{
+                //	Console.WriteLine(
+                //}
+                //Console.ReadLine();
+
+                Console.Clear();
+                Console.WriteLine($"{enemy.Name} is attacking you\n");
+                int temp = RollD20();
+                Console.WriteLine($"{enemy.Name} has to roll 10 or more to hit");
+                Console.WriteLine($"{enemy.Name} rolled {temp}");
+                Thread.Sleep(1000);
+                if (temp >= 10)
+                {
+                    Console.WriteLine($"{enemy.Name} roll a d10 to determine their damage");
+                    int d10 = RollD10();
+                    Thread.Sleep(500);
+                    Console.WriteLine($"{enemy.Name} rolled {d10 + enemy.Damage}");
+                    Thread.Sleep(500);
+                    newPlayer.TakeDamage(d10 + enemy.Damage);
+                    Console.WriteLine($"{newPlayer.Name} takes {d10 + enemy.Damage} damage");
+                }
+                else
+                {
+                    Thread.Sleep(500);
+                    Console.WriteLine($"{enemy.Name} roll is to low - miss");
+                }
+                Console.WriteLine("Press anything to continue");
+
+                // Reset for next turn
+                PlayerChooseCombatAction = true;
+
+                Console.ReadLine();
+                Console.Clear();
+                if (newPlayer.Health <= 0)
+                {
+                    Console.WriteLine($"{newPlayer.Name} is dead - GAME OVER");
+
+                    //---------------------------------
+                    // Call the gameover method here?
+                    //---------------------------------
+
+                    Thread.Sleep(10000);
+                    break;
+                }
+
+                Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
+            }
+            Console.Clear();
+        }
+
+        public void CastSpell()
+        {
+            //If we make spells 
+        }
+
+        public void UseItem()
+        {
+            Inventory.ShowInventory();
+        }
+
+        public int RollD20()
+        {
+            // 1 gets picked and not 20 - read the docs
+            Random r = new Random();
+            int rInt = r.Next(1, 20);
+            return rInt;
+        }
+
+        public int RollD10()
+        {
+            // 1 gets picked and not 10 - read the docs
+            Random r = new Random();
+            int rInt = r.Next(1, 10);
+            return rInt;
         }
     }
 }

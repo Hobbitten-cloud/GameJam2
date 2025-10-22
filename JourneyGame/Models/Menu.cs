@@ -1013,9 +1013,9 @@ namespace JourneyGame.Models
                     Console.WriteLine("What will you do?");
                     Console.WriteLine(
                            "1. Attack \n" +
-                           "2. Cast spell \n" +
-                           "3. Use item \n" +
-                           "4. Run \n"
+                           "2. Cast spell(WIP) \n" +
+                           "3. View items \n" +
+                           "4. Ragequit \n"
                     // add more options?
                     );
 
@@ -1077,8 +1077,7 @@ namespace JourneyGame.Models
                             Console.Clear();
                             InCombat = false;
                             PlayerChooseCombatAction = false;
-                            Console.WriteLine("You ran away!");
-                            Thread.Sleep(1000);
+                            Environment.Exit(0);
                             break;
                     }
                 }

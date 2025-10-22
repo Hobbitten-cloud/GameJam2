@@ -347,7 +347,7 @@ namespace JourneyGame.Models
                 // ===========================================
 
                 // Create player object to display stats
-                var newPlayer = new Player(playerName, playerRace, playerJob);
+                newPlayer = new Player(playerName, playerRace, playerJob);
 
                 while (CharacterLoop4 == true)
                 {

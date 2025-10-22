@@ -92,7 +92,7 @@ namespace JourneyGame.Models
         public void StartMenu()
         {
             
-            //CombatMenu();
+            CombatMenu();
             // Set console output encoding to UTF-8 for special characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
@@ -994,7 +994,7 @@ namespace JourneyGame.Models
         public void CombatMenu()
         {
             //Test player - fjern når fulde program køres
-            //newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
+            newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
 
             //Test enemy
             //Enemy enemy = new Enemy("JohnSouls", 10, 5, Race.Orc);
@@ -1003,7 +1003,7 @@ namespace JourneyGame.Models
             int playerInput = 0;
             Enemy randomEnemy = enemyRepo.GetRandomEnemy();
 
-            Console.WriteLine($"You are fighting {randomEnemy.Name}\n");
+            Console.WriteLine($"You are fighting the {randomEnemy.Race} {randomEnemy.Name}\n");
             //need access to the player somehow
             while (newPlayer.Health > 0 && randomEnemy.Health > 0)
             {
@@ -1032,6 +1032,7 @@ namespace JourneyGame.Models
                     {
                         Error.BasicException();
                     }
+                    Console.Clear();
 
                     switch (playerInput)
                     {
@@ -1039,16 +1040,16 @@ namespace JourneyGame.Models
                             PlayerChooseCombatAction = false;
                             Console.WriteLine($"{newPlayer.Name} is attacking {randomEnemy.Name}\n");
                             int tempdie = RollD20();
-                            Console.WriteLine($"Roll 10 or more to hit");
-                            Console.WriteLine($"You rolled {tempdie}");
+                            //Console.WriteLine($"Roll 10 or more to hit");
+                            //Console.WriteLine($"You rolled {tempdie}");
                             Thread.Sleep(1000);
 
                             if (tempdie >= 10)
                             {
-                                Console.WriteLine("You roll a d10 to determine your damage");
+                                //Console.WriteLine("You roll a d10 to determine your damage");
                                 int d10 = RollD10();
                                 Thread.Sleep(500);
-                                Console.WriteLine($"You rolled {d10}");
+                                //Console.WriteLine($"You rolled {d10}");
                                 Thread.Sleep(500);
                                 randomEnemy.TakeDamage(d10);
                                 Console.WriteLine($"{randomEnemy.Name} takes {d10} damage");
@@ -1056,7 +1057,7 @@ namespace JourneyGame.Models
                             else
                             {
                                 Thread.Sleep(500);
-                                Console.WriteLine($"your roll is to low - miss");
+                                Console.WriteLine($"{newPlayer.Name} missed");
                             }
                             Console.WriteLine("Press anything to continue");
                             Console.ReadLine();
@@ -1106,15 +1107,15 @@ namespace JourneyGame.Models
                 Console.Clear();
                 Console.WriteLine($"{randomEnemy.Name} is attacking you\n");
                 int temp = RollD20();
-                Console.WriteLine($"{randomEnemy.Name} has to roll 10 or more to hit");
-                Console.WriteLine($"{randomEnemy.Name} rolled {temp}");
+                //Console.WriteLine($"{randomEnemy.Name} has to roll 10 or more to hit");
+                //Console.WriteLine($"{randomEnemy.Name} rolled {temp}");
                 Thread.Sleep(1000);
                 if (temp >= 10)
                 {
-                    Console.WriteLine($"{randomEnemy.Name} roll a d10 to determine their damage");
+                    //Console.WriteLine($"{randomEnemy.Name} roll a d10 to determine their damage");
                     int d10 = RollD10();
                     Thread.Sleep(500);
-                    Console.WriteLine($"{randomEnemy.Name} rolled {d10 + randomEnemy.Damage}");
+                    //Console.WriteLine($"{randomEnemy.Name} rolled {d10 + randomEnemy.Damage}");
                     Thread.Sleep(500);
                     newPlayer.TakeDamage(d10 + randomEnemy.Damage);
                     Console.WriteLine($"{newPlayer.Name} takes {d10 + randomEnemy.Damage} damage");
@@ -1122,7 +1123,7 @@ namespace JourneyGame.Models
                 else
                 {
                     Thread.Sleep(500);
-                    Console.WriteLine($"{randomEnemy.Name} roll is to low - miss");
+                    Console.WriteLine($"{randomEnemy.Name} missed");
                 }
                 Console.WriteLine("Press anything to continue");
 

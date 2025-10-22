@@ -74,7 +74,7 @@ namespace JourneyGame.Models
         public string playerName = "";
 
         // Number of moves remaining for house exploration (starts at 30)
-        public int playerMoves = 30;
+        public int playerMoves = 10;
 
         #endregion
 
@@ -408,10 +408,11 @@ namespace JourneyGame.Models
                 // Display house rules with ASCII art title
                 Console.WriteLine(
                     " _   _ _____ _   _ _____ _____  ______ _   _ _      _____ _____ \r\n| | | |  _  | | | /  ___|  ___| | ___ \\ | | | |    |  ___/  ___|\r\n| |_| | | | | | | \\ `--.| |__   | |_/ / | | | |    | |__ \\ `--. \r\n|  _  | | | | | | |`--. \\  __|  |    /| | | | |    |  __| `--. \\\r\n| | | \\ \\_/ / |_| /\\__/ / |___  | |\\ \\| |_| | |____| |___/\\__/ /\r\n\\_| |_/\\___/ \\___/\\____/\\____/  \\_| \\_|\\___/\\_____/\\____/\\____/ \r\n                                                                \r\n                                                                \n" +
-                    "1. You have 30 moves to explore your house \n" +
-                    "2. Try to find as many items as you can before you leave \n" +
-                    "3. You can only move to one room at a time \n" +
-                    "4. Have fun!"
+                    $"You have {playerMoves} moves to explore your house \n" +
+                    "Try to find as many items as you can before you leave \n" +
+                    "You need 1 key item to unlock the front door \n" +
+                    "You can only move to one room at a time \n" +
+                    "Have fun!"
                 );
 
                 Console.WriteLine();
@@ -776,6 +777,7 @@ namespace JourneyGame.Models
                                 Console.WriteLine(option);
                             }
                             Console.WriteLine($"{optionNumber}. Exit room\n");
+                            Console.WriteLine();
                             Console.Write("Select a choice: ");
 
                             try
@@ -966,7 +968,6 @@ namespace JourneyGame.Models
             // World menu logic here - to be implemented for future game features
             // This could include outdoor exploration, shops, NPCs, etc.
         }
-
 
         // ===========================================
         // COMBAT MENU

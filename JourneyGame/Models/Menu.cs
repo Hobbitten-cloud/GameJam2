@@ -1,6 +1,7 @@
 ﻿using JourneyGame.Models.Enums;
 using JourneyGame.Models.ExceptionHandling;
 using JourneyGame.Repo;
+using NAudio.Wave;
 
 namespace JourneyGame.Models
 {
@@ -91,7 +92,7 @@ namespace JourneyGame.Models
         /// </summary>
         public void StartMenu()
         {
-            
+            Task.Run(() => Program.PlayMusic("Resources/Music/MenuMusic.mp3"));
             //CombatMenu();
             // Set console output encoding to UTF-8 for special characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -407,6 +408,9 @@ namespace JourneyGame.Models
         /// </summary>
         public void HouseRulesMenu()
         {
+            Program.StopMusic();
+            Task.Run(() => Program.PlayMusic("Resources/Music/HouseMusic.mp3"));
+
             int playerInput = 0;
 
             // House rules explanation loop - continues until player acknowledges rules
@@ -993,11 +997,8 @@ namespace JourneyGame.Models
        
         public void CombatMenu()
         {
-            //Test player - fjern når fulde program køres
-            //newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
-
-            //Test enemy
-            //Enemy enemy = new Enemy("JohnSouls", 10, 5, Race.Orc);
+            Program.StopMusic();
+            Task.Run(() => Program.PlayMusic("Resources/Music/CombatMusic.mp3"));
 
             Console.Clear();
             int playerInput = 0;

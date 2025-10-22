@@ -93,7 +93,7 @@ namespace JourneyGame.Models
         public void StartMenu()
         {
             Task.Run(() => Program.PlayMusic("Resources/Music/MenuMusic.mp3"));
-            //CombatMenu();
+            CombatMenu();
             // Set console output encoding to UTF-8 for special characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
@@ -999,7 +999,7 @@ namespace JourneyGame.Models
         {
             Program.StopMusic();
             Task.Run(() => Program.PlayMusic("Resources/Music/CombatMusic.mp3"));
-
+            //Player newPlayer = new Player("asdf", Race.Orc, Job.Warrior);  
             Console.Clear();
             int playerInput = 0;
             Enemy randomEnemy = enemyRepo.GetRandomEnemy();
@@ -1052,8 +1052,8 @@ namespace JourneyGame.Models
                                 Thread.Sleep(500);
                                 //Console.WriteLine($"You rolled {d10}");
                                 Thread.Sleep(500);
-                                randomEnemy.TakeDamage(d10);
-                                Console.WriteLine($"{randomEnemy.Name} takes {d10} damage");
+                                randomEnemy.TakeDamage(d10+newPlayer.Damage);
+                                Console.WriteLine($"{randomEnemy.Name} takes {d10+newPlayer.Damage} damage");
                             }
                             else
                             {

@@ -22,6 +22,10 @@ namespace JourneyGame.Models
         // Item repository instance for managing all game items
         ItemRepo itemRepo = new ItemRepo();
 
+        // ---------------------------------------------------------------
+        // WRITE OBJECT CREATION HERE FOR ENEMIES AND NPCS!
+        // ---------------------------------------------------------------
+
         new Player newPlayer;
 
         // Random number generator for house key placement
@@ -574,16 +578,26 @@ namespace JourneyGame.Models
                         {
                             // Player has house keys - allow exit
                             HouseMenuLoop = false;
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("You use the house keys to unlock the door and leave the house.");
                             Console.WriteLine("Congratulations! You have successfully escaped!");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine();
                             Console.Write("Press any key to continue: ");
                             Console.ReadLine();
+                            Console.Clear();
+
+                            // Proceed to combat menu or next game phase
+                            CombatMenu();
                         }
                         else
                         {
                             // Player doesn't have house keys - can't exit
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("You try to leave the house, but the door is locked.");
                             Console.WriteLine("You need the house keys to unlock the door!");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine();
                             Console.Write("Press any key to continue: ");
                             Console.ReadLine();
                             Console.Clear();
@@ -973,13 +987,14 @@ namespace JourneyGame.Models
         // ===========================================
         public bool InCombat = true;
         public bool PlayerChooseCombatAction = true;
+        public EnemyRepo enem
         public void CombatMenu()
         {
             //Test player - fjern når fulde program køres
-            newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
+            //newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
 
             //Test enemy
-            Enemy enemy = new Enemy("JohnSouls", 10, 5, Race.Orc);
+            //Enemy enemy = new Enemy("JohnSouls", 10, 5, Race.Orc);
 
             Console.Clear();
             int playerInput = 0;

@@ -1125,7 +1125,7 @@ namespace JourneyGame.Models
                     Thread.Sleep(500);
                     Console.WriteLine($"{randomEnemy.Name} missed");
                 }
-                Console.WriteLine("Press anything to continue");
+                Console.Write("Press anything to continue: ");
 
                 // Reset for next turn
                 PlayerChooseCombatAction = true;

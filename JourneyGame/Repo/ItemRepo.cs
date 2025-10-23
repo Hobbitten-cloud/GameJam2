@@ -1,4 +1,6 @@
-﻿namespace JourneyGame.Models
+﻿using JourneyGame.Models;
+
+namespace JourneyGame.Repo
 {
     public class ItemRepo
     {

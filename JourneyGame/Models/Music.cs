@@ -1,26 +1,16 @@
-﻿using JourneyGame.Models;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace JourneyGame
+namespace JourneyGame.Models
 {
-    public class Program
+    public static class Music
     {
         private static WaveOutEvent? _outputDevice;
         private static AudioFileReader? _audioFile;
-
-        static void Main(string[] args)
-        {
-            // NOTES 
-            // Ascii font used = Doom
-            // Website = https://patorjk.com/software/taag/#p=display&f=Doom&t=John+Journey&x=none&v=4&h=4&w=80&we=false
-
-            // Initialize game components here
-            var gameMenus = new Menu();
-            gameMenus.StartMenu();
-        }
-
         public static void PlayMusic(string filePath)
         {
             try

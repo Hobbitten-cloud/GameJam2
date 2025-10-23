@@ -1,5 +1,7 @@
 ﻿using JourneyGame.Models.Enums;
 using JourneyGame.Models.ExceptionHandling;
+using JourneyGame.Repo;
+using NAudio.Wave;
 
 namespace JourneyGame.Models
 {
@@ -9,7 +11,6 @@ namespace JourneyGame.Models
     /// </summary>
     public class Menu
     {
-
         // ===========================================
         // CLASS PROPERTIES AND FIELDS
         // ===========================================
@@ -21,7 +22,11 @@ namespace JourneyGame.Models
         // Item repository instance for managing all game items
         ItemRepo itemRepo = new ItemRepo();
 
-        new Player newPlayer;
+        //Enemy repository instance for managing all game enemies
+		EnemyRepo enemyRepo = new EnemyRepo();
+
+        //Makes player
+		new Player newPlayer;
 
         // Random number generator for house key placement
         private Random random = new Random();
@@ -73,7 +78,7 @@ namespace JourneyGame.Models
         public string playerName = "";
 
         // Number of moves remaining for house exploration (starts at 30)
-        public int playerMoves = 30;
+        public int playerMoves = 10;
 
         #endregion
 
@@ -87,7 +92,11 @@ namespace JourneyGame.Models
         /// </summary>
         public void StartMenu()
         {
+            Task.Run(() => Program.PlayMusic("Resources/Music/MenuMusic.mp3"));
+            //CombatMenu();
+            // Set console output encoding to UTF-8 for special characters
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
             // Main menu loop - continues until user makes a valid selection
             while (StartMenuLoop == true)
             {
@@ -338,7 +347,7 @@ namespace JourneyGame.Models
                 // ===========================================
 
                 // Create player object to display stats
-                var newPlayer = new Player(playerName, playerRace, playerJob);
+                newPlayer = new Player(playerName, playerRace, playerJob);
 
                 while (CharacterLoop4 == true)
                 {
@@ -399,6 +408,9 @@ namespace JourneyGame.Models
         /// </summary>
         public void HouseRulesMenu()
         {
+            Program.StopMusic();
+            Task.Run(() => Program.PlayMusic("Resources/Music/HouseMusic.mp3"));
+
             int playerInput = 0;
 
             // House rules explanation loop - continues until player acknowledges rules
@@ -407,10 +419,11 @@ namespace JourneyGame.Models
                 // Display house rules with ASCII art title
                 Console.WriteLine(
                     " _   _ _____ _   _ _____ _____  ______ _   _ _      _____ _____ \r\n| | | |  _  | | | /  ___|  ___| | ___ \\ | | | |    |  ___/  ___|\r\n| |_| | | | | | | \\ `--.| |__   | |_/ / | | | |    | |__ \\ `--. \r\n|  _  | | | | | | |`--. \\  __|  |    /| | | | |    |  __| `--. \\\r\n| | | \\ \\_/ / |_| /\\__/ / |___  | |\\ \\| |_| | |____| |___/\\__/ /\r\n\\_| |_/\\___/ \\___/\\____/\\____/  \\_| \\_|\\___/\\_____/\\____/\\____/ \r\n                                                                \r\n                                                                \n" +
-                    "1. You have 30 moves to explore your house \n" +
-                    "2. Try to find as many items as you can before you leave \n" +
-                    "3. You can only move to one room at a time \n" +
-                    "4. Have fun!"
+                    $"You have {playerMoves} moves to explore your house \n" +
+                    "Try to find as many items as you can before you leave \n" +
+                    "You need 1 key item to unlock the front door \n" +
+                    "You can only move to one room at a time \n" +
+                    "Have fun!"
                 );
 
                 Console.WriteLine();
@@ -557,7 +570,7 @@ namespace JourneyGame.Models
                         HandleRoomItems(parentsBedroom, parentsBedroomItems);
                         break;
                     case 5:
-                        // Parents Bedroom - Items: Mom's Toy (ID: 8), House keys (ID: 9)
+                        // View Inventory selected
                         Console.Clear();
                         Inventory.ShowInventory();
                         Console.Write("Press anything to continue: ");
@@ -573,16 +586,26 @@ namespace JourneyGame.Models
                         {
                             // Player has house keys - allow exit
                             HouseMenuLoop = false;
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("You use the house keys to unlock the door and leave the house.");
                             Console.WriteLine("Congratulations! You have successfully escaped!");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine();
                             Console.Write("Press any key to continue: ");
                             Console.ReadLine();
+                            Console.Clear();
+
+                            // Proceed to combat menu or next game phase
+                            CombatMenu();
                         }
                         else
                         {
                             // Player doesn't have house keys - can't exit
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("You try to leave the house, but the door is locked.");
                             Console.WriteLine("You need the house keys to unlock the door!");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine();
                             Console.Write("Press any key to continue: ");
                             Console.ReadLine();
                             Console.Clear();
@@ -602,7 +625,6 @@ namespace JourneyGame.Models
                 }
             }
         }
-
 
         // ===========================================
         // ROOM ITEM INTERACTION SYSTEM
@@ -775,6 +797,7 @@ namespace JourneyGame.Models
                                 Console.WriteLine(option);
                             }
                             Console.WriteLine($"{optionNumber}. Exit room\n");
+                            Console.WriteLine();
                             Console.Write("Select a choice: ");
 
                             try
@@ -966,35 +989,33 @@ namespace JourneyGame.Models
             // This could include outdoor exploration, shops, NPCs, etc.
         }
 
-
         // ===========================================
         // COMBAT MENU
         // ===========================================
         public bool InCombat = true;
         public bool PlayerChooseCombatAction = true;
+       
         public void CombatMenu()
         {
-            //Test player - fjern når fulde program køres
-            newPlayer = new Player("Skibidi", Race.Dwarf, Job.Warrior);
-
-            //Test enemy
-            Enemy enemy = new Enemy("JohnSouls", 10, 5, Race.Orc);
-
+            Program.StopMusic();
+            Task.Run(() => Program.PlayMusic("Resources/Music/CombatMusic.mp3"));
+            //Player newPlayer = new Player("asdf", Race.Orc, Job.Warrior);  
             Console.Clear();
             int playerInput = 0;
+            Enemy randomEnemy = enemyRepo.GetRandomEnemy();
 
-            Console.WriteLine($"You are fighting {enemy.Name}\n");
+            Console.WriteLine($"You are fighting the {randomEnemy.Race} {randomEnemy.Name}\n");
             //need access to the player somehow
-            while (newPlayer.Health > 0 && enemy.Health > 0)
+            while (newPlayer.Health > 0 && randomEnemy.Health > 0)
             {
                 while (PlayerChooseCombatAction == true)
                 {
                     Console.WriteLine("What will you do?");
                     Console.WriteLine(
                            "1. Attack \n" +
-                           "2. Cast spell \n" +
-                           "3. Use item \n" +
-                           "4. Run \n"
+                           "2. Cast spell(WIP) \n" +
+                           "3. View items \n" +
+                           "4. Ragequit \n"
                     // add more options?
                     );
 
@@ -1012,31 +1033,32 @@ namespace JourneyGame.Models
                     {
                         Error.BasicException();
                     }
+                    Console.Clear();
 
                     switch (playerInput)
                     {
                         case 1:
                             PlayerChooseCombatAction = false;
-                            Console.WriteLine($"{newPlayer.Name} is attacking {enemy.Name}\n");
+                            Console.WriteLine($"{newPlayer.Name} is attacking {randomEnemy.Name}\n");
                             int tempdie = RollD20();
-                            Console.WriteLine($"Roll 10 or more to hit");
-                            Console.WriteLine($"You rolled {tempdie}");
+                            //Console.WriteLine($"Roll 10 or more to hit");
+                            //Console.WriteLine($"You rolled {tempdie}");
                             Thread.Sleep(1000);
 
                             if (tempdie >= 10)
                             {
-                                Console.WriteLine("You roll a d10 to determine your damage");
+                                //Console.WriteLine("You roll a d10 to determine your damage");
                                 int d10 = RollD10();
                                 Thread.Sleep(500);
-                                Console.WriteLine($"You rolled {d10}");
+                                //Console.WriteLine($"You rolled {d10}");
                                 Thread.Sleep(500);
-                                enemy.TakeDamage(d10);
-                                Console.WriteLine($"{enemy.Name} takes {d10} damage");
+                                randomEnemy.TakeDamage(d10+newPlayer.Damage);
+                                Console.WriteLine($"{randomEnemy.Name} takes {d10+newPlayer.Damage} damage");
                             }
                             else
                             {
                                 Thread.Sleep(500);
-                                Console.WriteLine($"your roll is to low - miss");
+                                Console.WriteLine($"{newPlayer.Name} missed");
                             }
                             Console.WriteLine("Press anything to continue");
                             Console.ReadLine();
@@ -1055,8 +1077,7 @@ namespace JourneyGame.Models
                             Console.Clear();
                             InCombat = false;
                             PlayerChooseCombatAction = false;
-                            Console.WriteLine("You ran away!");
-                            Thread.Sleep(1000);
+                            Environment.Exit(0);
                             break;
                     }
                 }
@@ -1068,9 +1089,9 @@ namespace JourneyGame.Models
                 }
 
                 Console.Clear();
-                if (enemy.Health <= 0)
+                if (randomEnemy.Health <= 0)
                 {
-                    Console.WriteLine($"{enemy.Name} is dead - VICTORY");
+                    Console.WriteLine($"{randomEnemy.Name} is dead - VICTORY");
                     Thread.Sleep(5000);
                     break;
                 }
@@ -1084,27 +1105,27 @@ namespace JourneyGame.Models
                 //Console.ReadLine();
 
                 Console.Clear();
-                Console.WriteLine($"{enemy.Name} is attacking you\n");
+                Console.WriteLine($"{randomEnemy.Name} is attacking you\n");
                 int temp = RollD20();
-                Console.WriteLine($"{enemy.Name} has to roll 10 or more to hit");
-                Console.WriteLine($"{enemy.Name} rolled {temp}");
+                //Console.WriteLine($"{randomEnemy.Name} has to roll 10 or more to hit");
+                //Console.WriteLine($"{randomEnemy.Name} rolled {temp}");
                 Thread.Sleep(1000);
                 if (temp >= 10)
                 {
-                    Console.WriteLine($"{enemy.Name} roll a d10 to determine their damage");
+                    //Console.WriteLine($"{randomEnemy.Name} roll a d10 to determine their damage");
                     int d10 = RollD10();
                     Thread.Sleep(500);
-                    Console.WriteLine($"{enemy.Name} rolled {d10 + enemy.Damage}");
+                    //Console.WriteLine($"{randomEnemy.Name} rolled {d10 + randomEnemy.Damage}");
                     Thread.Sleep(500);
-                    newPlayer.TakeDamage(d10 + enemy.Damage);
-                    Console.WriteLine($"{newPlayer.Name} takes {d10 + enemy.Damage} damage");
+                    newPlayer.TakeDamage(d10 + randomEnemy.Damage);
+                    Console.WriteLine($"{newPlayer.Name} takes {d10 + randomEnemy.Damage} damage");
                 }
                 else
                 {
                     Thread.Sleep(500);
-                    Console.WriteLine($"{enemy.Name} roll is to low - miss");
+                    Console.WriteLine($"{randomEnemy.Name} missed");
                 }
-                Console.WriteLine("Press anything to continue");
+                Console.Write("Press anything to continue: ");
 
                 // Reset for next turn
                 PlayerChooseCombatAction = true;
@@ -1123,7 +1144,7 @@ namespace JourneyGame.Models
                     break;
                 }
 
-                Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{enemy.Name} health is {enemy.Health}\n\n\n");
+                Console.WriteLine($"{newPlayer.Name} health is: {newPlayer.Health}\n\n{randomEnemy.Name} health is {randomEnemy.Health}\n\n\n");
             }
             Console.Clear();
         }
@@ -1140,17 +1161,17 @@ namespace JourneyGame.Models
 
         public int RollD20()
         {
-            // 1 gets picked and not 20 - read the docs
+            // 1 gets picked and not 20
             Random r = new Random();
-            int rInt = r.Next(1, 20);
+            int rInt = r.Next(1, 21);
             return rInt;
         }
 
         public int RollD10()
         {
-            // 1 gets picked and not 10 - read the docs
+            // 1 gets picked and not 10 - min is included but not max therefor 11 to roll 10
             Random r = new Random();
-            int rInt = r.Next(1, 10);
+            int rInt = r.Next(1, 11);
             return rInt;
         }
     }
